@@ -1,0 +1,19 @@
+{
+ "site": "The Signature AI Image And Video Maker",
+ "site_url": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/",
+ "free_and_unlimited": true,
+ "goods_total": 2000,
+ "goods_goal": 1000000,
+ "ads_total": 600,
+ "engine": {
+  "js": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/assets/engine.js",
+  "py": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/assets/sigart.py",
+  "deterministic": true,
+  "offline_capable": true
+ },
+ "deep_links": {
+  "goods": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?goods=JAH-GOODS-000001",
+  "ad": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?ad=JAH-AD-000001"
+ },
+ "network": "THE JAH NETWORK \u2014 24 sites"
+}
