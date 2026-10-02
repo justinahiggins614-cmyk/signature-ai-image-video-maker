@@ -14,6 +14,7 @@
 "description":"Signature AI Pixel — free and unlimited AI image and video generation with a deterministic on-device art engine."}
 </script>
 <script src="assets/engine.js"></script>
+<script src="js/jah-talk-fallback.js"></script>
 <style>
 :root{--bg:#0a0618;--bg2:#140b2e;--card:#1a1038;--line:#3a2568;--txt:#f2ecff;--dim:#b9a8e0;--acc:#00f0ff;--gold:#ffd166;--pink:#ff2fb3}
 *{box-sizing:border-box}
@@ -561,12 +562,52 @@ document.getElementById("trygo").onclick=function(){
   document.getElementById("tryprev").innerHTML=SigArt.composeImage(p,{}).svg;
 };
 
+/* ================= JAHtalk shared talker (universal AI voice) =================
+   JAHtalk (js/jah-talk-fallback.js) is the shared, zero-network conversational
+   layer for every AI on every Signature site. Conversational intents ("hello",
+   "what are your duties?") are answered in human words by JAHtalk.reply, and
+   every final answer passes through JAHtalk.guard so no stat dump ever ships.
+   The profile below is a SITE-HELPER AI — it claims no canon JAH-AI ID and must
+   never present one. code/coherence_check.py verifies this. */
+/* JAH AI PROFILES (machine-readable; fields parsed by code/coherence_check.py) */
+var JIT_PROFILE_PIXEL={
+ "name":"Pixel Guide",
+ "id":"",
+ "description":"I am your guide to Signature AI Pixel — the free, unlimited image and video maker. Ask me how generation works, what the goods catalog holds, how product ads are made, or how to take the engine with you.",
+ "abilities":[
+  "Explain how image and video generation works on this site.",
+  "Walk you through the goods catalog and product ads.",
+  "Show you how to take the engine offline with you.",
+  "Keep generation honest — no trademarked characters or logos are reproduced."
+ ],
+ "domain":"AI image and video generation",
+ "kind":"helper"
+};
+var JIT={
+ /* conversational intents answered by the shared human voice (mirrors JAHtalk.reply) */
+ intent:/^(hi|hii+|hey|hello|yo|howdy|good\s?(morning|afternoon|evening|day)|greetings|sup|hiya)\b|what are your duties|what is your duty|what do you do|what can you do|your duties|your duty|your job|your role|your abilit|your capabilit|help me|^help$|what are you for|explain your duties|^duties$|who are you|your name|what is your name|introduce yourself|about yourself|thanks?|^thx$|^ty$|thank you|^(bye|goodbye|good\s?night|see you|later|gtg)\b|how are you|how's it going|how do you feel/,
+ /* if the user is chatting (not asking a topic question), return a human reply; else null */
+ talk:function(profile,q){
+  if(!window.JAHtalk)return null;
+  var t=String(q||"").toLowerCase().replace(/\s+/g," ").trim();
+  if(!this.intent.test(t))return null;
+  return JAHtalk.reply(profile,q);
+ },
+ /* every final answer passes through here: stat dumps get human repair */
+ out:function(profile,text){
+  if(window.JAHtalk)return JAHtalk.guard(text,profile);
+  return text;
+ }
+};
+
 /* ================= Q&A ================= */
 var QA={
  ask:function(){
   var inp=document.getElementById("qain"),q=inp.value.trim();if(!q)return;inp.value="";
   var log=document.getElementById("qalog");
-  log.insertAdjacentHTML("beforeend",'<div class="q">You: '+esc(q)+'</div><div class="a">'+esc(QA.answer(q))+'</div>');
+  var cv=JIT.talk(JIT_PROFILE_PIXEL,q);
+  var ans=cv!=null?cv:QA.answer(q);
+  log.insertAdjacentHTML("beforeend",'<div class="q">You: '+esc(q)+'</div><div class="a">'+JIT.out(JIT_PROFILE_PIXEL,esc(ans).replace(/\r?\n/g,"<br>"))+'</div>');
   log.scrollTop=log.scrollHeight;
  },
  answer:function(q){
@@ -587,6 +628,8 @@ var QA={
 };
 document.getElementById("qago").onclick=QA.ask;
 document.getElementById("qain").addEventListener("keydown",function(e){if(e.key==="Enter")QA.ask();});
+/* JAHtalk auto-greet: the Pixel Guide opens in the shared human voice */
+(function(){if(window.JAHtalk){var log=document.getElementById("qalog");var first=log.querySelector("div.a");if(first)first.innerHTML=esc(JAHtalk.greet(JIT_PROFILE_PIXEL));}})();
 
 /* ================= deep links + boot ================= */
 var ADRAF=null;
