@@ -38,7 +38,7 @@ def write_sitemap(urls, path):
 def main():
     goods = goods_ids()
     ads = ads_ids()
-    pages = [SITE, SITE + "?tab=image", SITE + "?tab=goods",
+    pages = [SITE, SITE + "?tab=image", SITE + "?tab=video", SITE + "?tab=goods",
              SITE + "?tab=ads", SITE + "?tab=take"]
     # goods sitemaps, chunked
     sm_files = ["sitemap-pages.xml"]

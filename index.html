@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Signature AI Pixel — Free and Unlimited Image Generation</title>
-<meta name="description" content="Signature AI Pixel — free and unlimited AI image generation. Deterministic client-side art engine, 1,000,000 potential goods, and auto-made product image ads. All original Signature art.">
+<title>Signature AI Pixel — Free and Unlimited Image &amp; Video Generation</title>
+<meta name="description" content="Signature AI Pixel — free and unlimited AI image and video generation. Deterministic client-side art engine, 1,000,000 potential goods, and auto-made product ads. All original Signature art.">
 <link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"Signature AI Pixel",
 "url":"https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/",
 "applicationCategory":"MultimediaApplication","operatingSystem":"Any",
 "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
-"description":"Signature AI Pixel — free and unlimited AI image generation with a deterministic on-device art engine."}
+"description":"Signature AI Pixel — free and unlimited AI image and video generation with a deterministic on-device art engine."}
 </script>
 <script src="assets/engine.js"></script>
 <style>
@@ -85,17 +85,17 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <header class="brand">
 <h1>🎨 SIGNATURE AI PIXEL</h1>
 <div class="freebadge">★ FREE AND UNLIMITED ★</div>
-<p class="sub">Type an idea — the Signature art engine renders a finished image right on your device. No accounts, no credits, no limits. Every piece of art here is original, generated deterministically: the same prompt always makes the same artwork.</p>
+<p class="sub">Type an idea — the Signature art engine renders finished images and animated videos right on your device. No accounts, no credits, no limits. Every piece of art here is original, generated deterministically: the same prompt always makes the same artwork.</p>
 <div class="counts">
 <div class="countchip"><b id="cGoods">…</b> / 1,000,000 GOODS</div>
 <div class="countchip"><b id="cAds">…</b> PRODUCT ADS MADE</div>
-<div class="countchip"><b>∞</b> IMAGES — FREE</div>
+<div class="countchip"><b>∞</b> IMAGES &amp; VIDEOS — FREE</div>
 </div>
-<a class="sistercard" href="https://justinahiggins614-cmyk.github.io/signature-ai-video-maker/" style="display:block;margin:14px auto 0;max-width:640px;background:#1a1038;border:1px solid #3a2568;border-radius:12px;padding:12px 16px;color:#f2ecff;text-decoration:none">🎬 <b>Making videos?</b> Visit our sister site <b>The Signature Video Maker AI</b> — free and unlimited video generation <span style="color:#00f0ff">→</span></a>
 </header>
 <nav class="jahnet" aria-label="THE JAH NETWORK" id="jahnet"></nav>
 <div class="tabs" role="tablist">
 <button class="on" data-tab="image" role="tab">🎨 Make an Image</button>
+<button data-tab="video" role="tab">🎬 Make a Video</button>
 <button data-tab="goods" role="tab">🛍️ Goods Catalog</button>
 <button data-tab="ads" role="tab">📢 Product Ads</button>
 <button data-tab="take" role="tab">💾 Take the AI</button>
@@ -130,7 +130,30 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <div class="note">🛡️ Trademark-safe by design: the engine never reproduces trademarked characters, logos or brands. If your prompt names one, it renders an original Signature-style abstraction instead — and tells you so.</div>
 </section>
 
-
+<!-- VIDEO STUDIO -->
+<section class="pane" id="pane-video">
+<div class="card">
+<h2>🎬 Video Studio</h2>
+<label class="lbl" for="vidprompt">Describe your video</label>
+<textarea id="vidprompt" placeholder="e.g. flying over a neon city at night"></textarea>
+<div class="row">
+<div style="flex:1;min-width:160px"><label class="lbl" for="vidsec">Length</label><select id="vidsec"><option value="3">3 seconds</option><option value="6" selected>6 seconds</option><option value="10">10 seconds</option></select></div>
+<div style="flex:1;min-width:200px"><label class="lbl" for="vidcap">Caption</label><input type="text" id="vidcap" placeholder="text shown in the video"></input></div>
+</div>
+<div class="row">
+<button class="btn" id="vidgo">✨ GENERATE VIDEO</button>
+<button class="btn ghost" id="vidrand">🎲 Surprise me</button>
+</div>
+<div class="preview"><canvas id="vidcanvas" width="1280" height="720" style="display:none"></canvas></div>
+<div class="row" id="vidtools" style="display:none">
+<button class="btn gold" id="viddl">⬇ Download .webm</button>
+<button class="btn ghost" id="vidcopy">📋 Copy prompt + settings</button>
+<button class="btn ghost" id="vidread">🔊 Read description</button>
+</div>
+<div class="provenance" id="vidprov"></div>
+</div>
+<div class="note">Videos render as live canvas animation on your device and export to <b>.webm</b> (Chrome/Edge desktop recommended for export). Deterministic: the same prompt makes the same video.</div>
+</section>
 
 <!-- GOODS -->
 <section class="pane" id="pane-goods">
@@ -151,8 +174,8 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <!-- ADS -->
 <section class="pane" id="pane-ads">
 <div class="card">
-<h2>📢 Product Ads — auto-made image ads for every Signature product</h2>
-<p class="sub">The engine watches the catalogs and makes an image ad for each product — stored here as made. Image creative downloads as PNG/SVG. Video ads live on our sister site The Signature Video Maker AI.</p>
+<h2>📢 Product Ads — auto-made for every Signature product</h2>
+<p class="sub">The engine watches the catalogs and makes an image ad and a video ad for each product — stored here as made. Image creative downloads as PNG/SVG; video ads preview live on your device.</p>
 <div class="toolbar">
 <input type="text" id="aq" placeholder="Search ads by product…" aria-label="Search ads">
 <button class="btn" id="ago">Search</button>
@@ -189,7 +212,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <div class="card">
 <h2>❓ Ask about Signature AI Pixel</h2>
 <div class="qa">
-<div id="qalog"><div class="a">Ask me anything — how image generation works, what the goods catalog holds, how image ads are made, or how to take the engine with you. (For videos, visit our sister site The Signature Video Maker AI.)</div></div>
+<div id="qalog"><div class="a">Ask me anything — how generation works, what the goods catalog holds, how ads are made, or how to take the engine with you.</div></div>
 <div class="row"><input type="text" id="qain" placeholder="Ask a question…" aria-label="Ask a question"><button class="btn" id="qago">Ask</button></div>
 </div>
 </div>
@@ -200,7 +223,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <div id="ttsbar"><span id="ttstext">Reading…</span><button id="ttspause">Pause</button><button id="ttsresume">Resume</button><button id="ttsstop">Stop</button></div>
 
 <footer>
-<p><b>SIGNATURE AI PIXEL</b> — free and unlimited image generation, a million potential goods, and auto-made product image ads. Videos live on our sister site <a href="https://justinahiggins614-cmyk.github.io/signature-ai-video-maker/" style="color:#00f0ff">The Signature Video Maker AI</a>.</p>
+<p><b>SIGNATURE AI PIXEL</b> — free and unlimited image &amp; video generation, a million potential goods, and auto-made product ads.</p>
 <p>All artwork is original and generated deterministically on your device. Nothing here reproduces trademarked characters, logos or brands — trademarked names in prompts render as original Signature-style abstractions. The image generator is free and unlimited; the Llama model itself is "currently free for all internet tasks" per the Signature Llama site.</p>
 <p>Part of <b>THE JAH NETWORK</b> · <span id="footcount"></span></p>
 </footer>
@@ -209,10 +232,11 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 /* ================= 25-site nav ================= */
 (function(){
 var B="https://justinahiggins614-cmyk.github.io/";
-var S=[[1,"The Signature AI Phone Book","jah-ai-models/"],[2,"Calculator","jah-calculator/"],[3,"Dictionary","jah-dictionary/"],[4,"JAH Wiki","jah-wiki/"],[5,"JAH-N Wiki","jah-n-wiki-leaks/"],[6,"Patent Catalog","cyber-patent-catalog/"],[7,"Spec Catalog","signature-one-archive/specs.html"],[8,"Signature Llama","signature-llama/"],[9,"PC Depository","jah-computer-systems/"],[10,"Cyber Mega-Mall","signature-cyber-mega-mall/"],[11,"Signature University","signature-university/"],[12,"Book Depository","signature-books/"],[13,"Comic Store","signature-comics/"],[14,"Global Newspaper Archive","signature-newspapers/"],[15,"3D Print Depository","signature-3d-print/"],[16,"Signature Backend","signature-backend/"],[17,"Boundless Generator Archive","signature-boundless-generators/"],[18,"AI Mix Lab","signature-ai-mixlab/"],[19,"AI Olypics","signature-ai-olypics/"],[20,"Chip Maker and Archive","signature-chip-maker/"],[21,"App Archive","signature-app-archive/"],[22,"AI Robot Matcher","signature-ai-robot-matcher/"],[23,"Experiment Solver","signature-experiment-solver/"],[25,"Video Maker AI","signature-ai-video-maker/"]];
+var S=[[1,"The Signature AI Phone Book","jah-ai-models/"],[2,"Calculator","jah-calculator/"],[3,"Dictionary","jah-dictionary/"],[4,"JAH Wiki","jah-wiki/"],[5,"JAH-N Wiki","jah-n-wiki-leaks/"],[6,"Patent Catalog","cyber-patent-catalog/"],[7,"Spec Catalog","signature-one-archive/specs.html"],[8,"Signature Llama","signature-llama/"],[9,"PC Depository","jah-computer-systems/"],[10,"Cyber Mega-Mall","signature-cyber-mega-mall/"],[11,"Signature University","signature-university/"],[12,"Book Depository","signature-books/"],[13,"Comic Store","signature-comics/"],[14,"Global Newspaper Archive","signature-newspapers/"],[15,"3D Print Depository","signature-3d-print/"],[16,"Signature Backend","signature-backend/"],[17,"Boundless Generator Archive","signature-boundless-generators/"],[18,"AI Mix Lab","signature-ai-mixlab/"],[19,"AI Olypics","signature-ai-olypics/"],[20,"Chip Maker and Archive","signature-chip-maker/"],[21,"App Archive","signature-app-archive/"],[22,"AI Robot Matcher","signature-ai-robot-matcher/"],[23,"Experiment Solver","signature-experiment-solver/"],[25,"Song Maker AI","signature-ai-song-maker/"]];
 var h='<div style="width:100%;text-align:center;color:#b9a8e0;margin-bottom:6px">THE JAH NETWORK</div>';
 S.forEach(function(x){
-  h+='<a href="'+B+x[2]+'">'+x[0]+' '+x[1]+'</a>';
+  var soon=(x[0]===25);
+  h+=soon?'<span class="soon">'+x[0]+' '+x[1]+' <span class="soonpill">SOON</span></span>':'<a href="'+B+x[2]+'">'+x[0]+' '+x[1]+'</a>';
 });
 h+='<span class="here">24 Signature AI Pixel — YOU ARE HERE</span>';
 document.getElementById("jahnet").innerHTML=h;
@@ -338,6 +362,55 @@ document.getElementById("imgcopy").onclick=function(){
 document.getElementById("imgread").onclick=function(){if(IMG.art)rdSpeak("Signature artwork. "+IMG.art.description+(IMG.art.guarded?" "+IMG.art.guardNote:""));};
 })();
 
+/* ================= VIDEO STUDIO ================= */
+var VID={plan:null,raf:null,playing:false};
+(function(){
+var SURP=["flying over a neon city at night","waves rolling under a violet moon","sunrise over ember mountains","drifting through a star field"];
+document.getElementById("vidrand").onclick=function(){document.getElementById("vidprompt").value=SURP[Math.floor(Math.random()*SURP.length)];};
+function stopPrev(){VID.playing=false;if(VID.raf)cancelAnimationFrame(VID.raf);}
+document.getElementById("vidgo").onclick=function(){
+  var p=document.getElementById("vidprompt").value.trim();
+  if(!p){alert("Describe your video first.");return;}
+  stopPrev();
+  var plan=SigArt.planVideo(p,{seconds:parseInt(document.getElementById("vidsec").value,10),caption:document.getElementById("vidcap").value.trim()||undefined});
+  VID.plan=plan;
+  var cv=document.getElementById("vidcanvas");cv.style.display="block";
+  var ctx=cv.getContext("2d"),t0=performance.now();
+  VID.playing=true;
+  (function loop(){
+    if(!VID.playing)return;
+    var t=((performance.now()-t0)/1000)%plan.seconds;
+    SigArt.drawVideoFrame(ctx,plan,t);
+    VID.raf=requestAnimationFrame(loop);
+  })();
+  document.getElementById("vidtools").style.display="flex";
+  var prov="Seed <b>"+plan.seedHex+"</b> · palette <b>"+esc(plan.palette)+"</b> · "+plan.seconds+"s @ 15fps · deterministic";
+  if(plan.guarded)prov+='<br>🛡️ '+esc(plan.guardNote);
+  document.getElementById("vidprov").innerHTML=prov;
+};
+document.getElementById("viddl").onclick=function(){
+  if(!VID.plan){return;}
+  stopPrev();
+  var cv=document.getElementById("vidcanvas"),btn=this;btn.disabled=true;btn.innerHTML='<span class="spin"></span> Recording…';
+  /* re-render from t=0 while recording */
+  setTimeout(function(){
+    SigArt.exportWebm(cv,VID.plan,function(blob,err){
+      btn.disabled=false;btn.textContent="⬇ Download .webm";
+      if(err||!blob){alert(err||"Export failed.");return;}
+      SigArt.download(URL.createObjectURL(blob),"sigvid-"+VID.plan.seedHex+".webm");
+      /* resume preview */
+      document.getElementById("vidgo").click();
+    });
+  },300);
+};
+document.getElementById("vidcopy").onclick=function(){
+  if(!VID.plan)return;
+  var t="Video prompt: "+VID.plan.prompt+"\nLength: "+VID.plan.seconds+"s @ 15fps\nPalette: "+VID.plan.palette+"\nSeed: "+VID.plan.seedHex;
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){alert("Copied!");},function(){prompt("Copy:",t);});
+};
+document.getElementById("vidread").onclick=function(){if(VID.plan)rdSpeak("Signature video. "+VID.plan.seconds+" second animated scene: "+VID.plan.caption+". Palette "+VID.plan.palette+".");};
+})();
+
 /* ================= GOODS UI ================= */
 var GoodsUI={list:[],shown:0,filter:{q:"",cat:"",az:""},
 init:function(){
@@ -453,16 +526,22 @@ open:function(id){
   DB.aChunk(row[3]).then(function(m){
     var a=m[id];if(!a)return;
     var svg=SigArt.adCreative(a);
+    var plan=SigArt.planVideo(a.product.name+" — "+a.tagline,{seconds:a.video_seconds,caption:a.product.name});
     document.getElementById("mbody").innerHTML=
       "<h2>Ad "+a.id+"</h2><p style='color:#b9a8e0'>Advertises: <b>"+esc(a.product.name)+"</b> ("+esc(a.product.site)+" · "+esc(a.product.pid)+")</p>"+
       svg+
+      "<h3>Video ad ("+a.video_seconds+"s)</h3><canvas id='adcanvas' width='1280' height='720' style='width:100%;border-radius:12px'></canvas>"+
       '<div class="row"><button class="btn gold" id="madpng">⬇ Image ad PNG</button>'+
       '<button class="btn ghost" id="madsvg">⬇ Image ad SVG</button>'+
-      '<button class="btn ghost" id="madrd">🔊 Read</button></div>'+
-      '<p class="note">The video version of this ad plays on our sister site <a href="https://justinahiggins614-cmyk.github.io/signature-ai-video-maker/" style="color:#00f0ff">The Signature Video Maker AI</a>.</p>';
+      '<button class="btn ghost" id="madwebm">⬇ Video ad .webm</button>'+
+      '<button class="btn ghost" id="madrd">🔊 Read</button></div>';
     document.getElementById("modal").classList.add("on");
+    var cv=document.getElementById("adcanvas"),ctx=cv.getContext("2d"),t0=performance.now();
+    if(ADRAF)cancelAnimationFrame(ADRAF);
+    (function loop(){var t=((performance.now()-t0)/1000)%plan.seconds;SigArt.drawVideoFrame(ctx,plan,t);ADRAF=requestAnimationFrame(loop);})();
     document.getElementById("madpng").onclick=function(){SigArt.svgToPng(svg,1200,800).then(function(b){SigArt.download(URL.createObjectURL(b),a.id+".png");});};
     document.getElementById("madsvg").onclick=function(){var b=new Blob([svg],{type:"image/svg+xml"});SigArt.download(URL.createObjectURL(b),a.id+".svg");};
+    document.getElementById("madwebm").onclick=function(){if(ADRAF)cancelAnimationFrame(ADRAF);ADRAF=null;SigArt.exportWebm(cv,plan,function(b,e){if(e||!b){alert(e||"Export failed.");return;}SigArt.download(URL.createObjectURL(b),a.id+".webm");});};
     document.getElementById("madrd").onclick=function(){rdSpeak("Advertisement "+a.id+". "+a.headline+". "+a.product.name+". "+a.tagline);};
   });
 }};
@@ -493,17 +572,17 @@ var QA={
  answer:function(q){
   q=q.toLowerCase();
   var has=function(){for(var i=0;i<arguments.length;i++)if(q.indexOf(arguments[i])>=0)return true;return false;};
-  if(has("free","cost","price","pay","unlimited"))return "Yes — image generation here is free and unlimited. No accounts, no credits, no caps. (The Llama model powering prompt enhancement is 'currently free for all internet tasks' per the Signature Llama site.) For free unlimited video, visit our sister site The Signature Video Maker AI.";
-  if(has("video","webm","animate","motion"))return "Videos moved to our sister site — The Signature Video Maker AI does free and unlimited video generation. Signature AI Pixel is the image side.";
+  if(has("free","cost","price","pay","unlimited"))return "Yes — image and video generation here is free and unlimited. No accounts, no credits, no caps. (The Llama model powering prompt enhancement is 'currently free for all internet tasks' per the Signature Llama site.)";
+  if(has("video","webm","animate","motion"))return "Type a description in the Video Studio, pick a length, and preview the animation live. Download exports a real .webm file — best in Chrome or Edge on desktop. Same prompt always makes the same video.";
   if(has("image","picture","png","svg","photo"))return "The Image Studio renders a finished 1200×800 scene from your words — deterministic SVG you can download as SVG or PNG. Toggle prompt enhancement to let Signature Llama expand your idea first.";
   if(has("goods","poster","shirt","sticker","surfboard","merch","catalog"))return "The Goods Catalog holds "+(DB.gIdx?DB.gIdx.length.toLocaleString("en-US"):"thousands of")+" potential goods marching to 1,000,000 — posters, stickers, shirts, surfboards, mugs and more. Each carries original Signature art as a printable design mockup, free to download.";
-  if(has("ad","advertis"))return "Product Ads are auto-made by the engine for products across the Signature network — "+(DB.aIdx?DB.aIdx.length.toLocaleString("en-US"):"hundreds")+" made so far, each with an image creative, stored as made and downloadable. Video ads live on our sister site.";
+  if(has("ad","advertis"))return "Product Ads are auto-made by the engine for products across the Signature network — "+(DB.aIdx?DB.aIdx.length.toLocaleString("en-US"):"hundreds")+" made so far, each with an image creative and a video creative, stored as made and downloadable.";
   if(has("download","copy","take","thumbdrive","offline","python","engine"))return "Grab engine.js (browser) or sigart.py (Python) from the Take the AI tab — the whole generator in two files. They run offline with no keys. Try: python3 sigart.py \"a lighthouse at dusk\" art.svg";
   if(has("llama","ai","powered","enhance"))return "Prompt enhancement can run through Signature Llama, loaded live from the Signature Backend — or the on-device deterministic engine if Llama can't load. The page always tells you which path was used.";
   if(has("trademark","brand","logo","character","safe"))return "The engine never reproduces trademarked characters, logos or brands. Name one in a prompt and it renders an original Signature-style abstraction instead — and says so on the artwork's provenance line.";
   if(has("deterministic","same","seed"))return "Every render is seeded from your exact prompt and settings — the same input always produces the same artwork, on any device, forever. The seed is printed on each piece.";
   if(has("who","manon","justin","made","creator"))return "This maker was built by the Signature System for Justin Addam Higgins — part of THE JAH NETWORK of free sites.";
-  return "I can answer about image generation, the goods catalog, product image ads, taking the engine with you, Llama enhancement, or trademark safety. What would you like to know?";
+  return "I can answer about image/video generation, the goods catalog, product ads, taking the engine with you, Llama enhancement, or trademark safety. What would you like to know?";
  }
 };
 document.getElementById("qago").onclick=QA.ask;
@@ -516,7 +595,7 @@ function route(){
   function whenReady(flag,fn){var t=setInterval(function(){if(DB[flag]){clearInterval(t);fn();}},300);}
   if(q.get("goods")){goTab("goods");whenReady("gIdx",function(){GoodsUI.open(q.get("goods"));});}
   else if(q.get("ad")){goTab("ads");whenReady("aIdx",function(){AdsUI.open(q.get("ad"));});}
-  else if(q.get("tab")){var tb=q.get("tab");goTab(tb==="video"?"image":tb);}
+  else if(q.get("tab")){goTab(q.get("tab"));}
 }
 DB.load().then(route,route);
 </script>
