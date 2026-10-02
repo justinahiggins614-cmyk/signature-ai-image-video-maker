@@ -1,16 +1,17 @@
-# The Signature AI Image And Video Maker
+# Signature AI Pixel
 
-**FREE AND UNLIMITED** AI image + video generation — site 24 of THE JAH NETWORK.
+**FREE AND UNLIMITED** AI image generation — site 24 of THE JAH NETWORK.
 
 Live: https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/
 
+Sister site: [The Signature Video Maker AI](https://justinahiggins614-cmyk.github.io/signature-ai-video-maker/) (site 25 — free and unlimited video generation; title provisional).
+
 ## What it is
 - **Image Studio** — type a prompt, get a finished 1200×800 original artwork (deterministic seeded SVG composition). Download SVG/PNG, copy settings, read-aloud description.
-- **Video Studio** — type a prompt, get a live canvas animation preview (3/6/10s @ 15fps), export a real `.webm`.
 - **Powered by his AI** — prompt enhancement goes through Signature Llama (loaded live from the Signature Backend) with quiet deterministic on-device fallback; the page says which path was used.
 - **Take the AI** — the whole generator is two files (`assets/engine.js`, `assets/sigart.py`), downloadable/copyable, offline, no keys.
 - **Goods Catalog** — JAH-GOODS-###### records marching to 1,000,000 across 24 product categories (posters, stickers, shirts, surfboards…), each with a deterministic design mockup.
-- **Product Ads** — JAH-AD-###### records auto-made for products across the Signature network (mall, books, comics), each with image + video creative, stored as made.
+- **Product Ads** — JAH-AD-###### records auto-made for products across the Signature network (mall, books, comics), each with an image creative, stored as made. Video ads live on the sister site.
 
 ## Data layout
 - `data/state.json` — goods next_index/total

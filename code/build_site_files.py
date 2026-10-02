@@ -38,7 +38,7 @@ def write_sitemap(urls, path):
 def main():
     goods = goods_ids()
     ads = ads_ids()
-    pages = [SITE, SITE + "?tab=image", SITE + "?tab=video", SITE + "?tab=goods",
+    pages = [SITE, SITE + "?tab=image", SITE + "?tab=goods",
              SITE + "?tab=ads", SITE + "?tab=take"]
     # goods sitemaps, chunked
     sm_files = ["sitemap-pages.xml"]
@@ -61,7 +61,7 @@ def main():
     st = json.load(open(os.path.join(BASE, "data", "state.json"))) if os.path.exists(os.path.join(BASE, "data", "state.json")) else {"goods_total": 0}
     ast = json.load(open(os.path.join(BASE, "data", "ads_state.json"))) if os.path.exists(os.path.join(BASE, "data", "ads_state.json")) else {"ads_total": 0}
     api = {
-        "site": "The Signature AI Image And Video Maker",
+        "site": "Signature AI Pixel",
         "site_url": SITE,
         "free_and_unlimited": True,
         "goods_total": st.get("goods_total", 0),
@@ -70,7 +70,7 @@ def main():
         "engine": {"js": SITE + "assets/engine.js", "py": SITE + "assets/sigart.py",
                    "deterministic": True, "offline_capable": True},
         "deep_links": {"goods": SITE + "?goods=JAH-GOODS-000001", "ad": SITE + "?ad=JAH-AD-000001"},
-        "network": "THE JAH NETWORK — 24 sites",
+        "network": "THE JAH NETWORK — 25 sites",
     }
     json.dump(api, open(os.path.join(BASE, "api.json"), "w"), indent=1)
     print(f"sitemap: {len(pages)} pages + {len(goods)} goods + {len(ads)} ads | api.json written")

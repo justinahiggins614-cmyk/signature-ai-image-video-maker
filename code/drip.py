@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""drip.py — 2h drip for the Image And Video Maker.
+"""drip.py — 2h drip for Signature AI Pixel (image side).
 +1,000 goods + 250 ads per run toward 1,000,000 goods. Silent unless failure.
 800MB repo-size guard (sideways sharding would go here; data is tiny).
 """
