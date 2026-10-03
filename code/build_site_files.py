@@ -114,7 +114,10 @@ def main():
     goods = goods_ids()
     ads = ads_ids()
     pages = [SITE, SITE + "?tab=image", SITE + "?tab=video", SITE + "?tab=goods",
-             SITE + "?tab=ads", SITE + "?tab=take", SITE + "goods-catalog.html"]
+             SITE + "?tab=ads", SITE + "?tab=take", SITE + "goods-catalog.html",
+             SITE + "pixel-manifest.json", SITE + "ai-manifest.json", SITE + "llms.txt",
+             SITE + "api.json", SITE + "data/counts.json", SITE + "data/pixel-catalog.json",
+             SITE + "docs/DETERMINISM.md"]
     # goods sitemaps, chunked
     sm_files = ["sitemap-pages.xml"]
     write_sitemap(pages, os.path.join(BASE, "sitemap-pages.xml"))
