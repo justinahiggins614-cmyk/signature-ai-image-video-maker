@@ -13,6 +13,9 @@
 "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
 "description":"Signature AI Pixel — free and unlimited AI image and video generation with a deterministic on-device art engine."}
 </script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Dataset","name":"Signature AI Pixel","creator":{"@type":"Person","name":"Justin Addam Higgins"}}
+</script>
 <script src="assets/engine.js"></script>
 <script src="js/jah-talk-fallback.js"></script>
 <style>
@@ -25,6 +28,8 @@ header.brand h1{margin:0;font-size:clamp(24px,4.5vw,44px);letter-spacing:2px;bac
 .freebadge{display:inline-block;margin-top:12px;padding:10px 26px;border:2px solid var(--gold);border-radius:40px;color:var(--gold);font-weight:bold;font-size:18px;letter-spacing:2px;box-shadow:0 0 18px #ffd16655}
 .sub{color:var(--dim);max-width:820px;margin:12px auto 0;font-size:14px;line-height:1.5}
 .counts{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:16px 0 4px}
+.statscoll{margin:0}.statscoll>summary{display:none}
+@media(max-width:767px){.statscoll>summary{display:list-item;cursor:pointer;color:var(--dim);font-size:12px;text-align:center;margin:10px 0 0}}
 .countchip{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 18px;font-size:14px}
 .countchip b{color:var(--acc);font-size:18px}
 nav.jahnet{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:12px;background:#0d0722;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:12px}
@@ -59,10 +64,10 @@ label.lbl{display:block;color:var(--dim);font-size:13px;margin:12px 0 6px}
 .gcard .id{color:var(--dim);font-size:11px}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px}
 .toolbar input[type=text]{width:auto;flex:1;min-width:180px}
-.az{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+.az{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;position:sticky;top:0;z-index:30;background:#0a0618;padding:8px 0}
 .az button{background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:8px;padding:5px 9px;cursor:pointer}
 .az button.on{color:var(--acc);border-color:var(--acc)}
-.modal{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;z-index:50;padding:12px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:50;padding:12px}
 .modal.on{display:flex}
 .modal .box{background:var(--card);border:1px solid var(--line);border-radius:16px;max-width:860px;width:100%;max-height:92vh;overflow:auto;padding:20px}
 .modal .box svg{max-width:100%}
@@ -87,13 +92,13 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <h1>🎨 SIGNATURE AI PIXEL</h1>
 <div class="freebadge">★ FREE AND UNLIMITED ★</div>
 <p class="sub">Type an idea — the Signature art engine renders finished images and animated videos right on your device. No accounts, no credits, no limits. Every piece of art here is original, generated deterministically: the same prompt always makes the same artwork.</p>
-<div class="counts">
+<details class="statscoll" open><summary>Site statistics</summary><div class="counts">
 <div class="countchip"><b id="cGoods">…</b> / 1,000,000 GOODS</div>
 <div class="countchip"><b id="cAds">…</b> PRODUCT ADS MADE</div>
 <div class="countchip"><b>∞</b> IMAGES &amp; VIDEOS — FREE</div>
-</div>
+</div></details>
 </header>
-<nav class="jahnet" aria-label="THE JAH NETWORK" id="jahnet"></nav>
+<nav class="jahnet" aria-label="JAH Network Global Ecosystem" role="navigation" id="jahnet"></nav>
 <div class="tabs" role="tablist">
 <button class="on" data-tab="image" role="tab">🎨 Make an Image</button>
 <button data-tab="video" role="tab">🎬 Make a Video</button>
@@ -476,15 +481,17 @@ open:function(id){
       '<button class="btn ghost" id="mgpng">⬇ PNG</button>'+
       '<button class="btn ghost" id="mgcp">📋 Copy</button>'+
       '<button class="btn ghost" id="mgrd">🔊 Read</button></div>';
-    document.getElementById("modal").classList.add("on");
+    modalShow();
     document.getElementById("mgdl").onclick=function(){var b=new Blob([SigArt.mockupSVG(g.cat,art,g.seed)],{type:"image/svg+xml"});SigArt.download(URL.createObjectURL(b),g.id+".svg");};
     document.getElementById("mgpng").onclick=function(){SigArt.svgToPng(SigArt.mockupSVG(g.cat,art,g.seed),600,600).then(function(bl){SigArt.download(URL.createObjectURL(bl),g.id+".png");});};
     document.getElementById("mgcp").onclick=function(){var t=g.id+" — "+g.name+" ("+g.cat+")\n"+g.desc+"\nArt seed: "+art.seedHex;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){alert("Copied!");},function(){prompt("Copy:",t);});};
     document.getElementById("mgrd").onclick=function(){rdSpeak(g.name+". "+g.desc);};
   });
 }};
-document.getElementById("mx").onclick=function(){if(ADRAF)cancelAnimationFrame(ADRAF);ADRAF=null;document.getElementById("modal").classList.remove("on");};
-document.getElementById("modal").addEventListener("click",function(e){if(e.target===this){if(ADRAF)cancelAnimationFrame(ADRAF);ADRAF=null;this.classList.remove("on");}});
+function modalShow(){document.getElementById("modal").classList.add("on");document.body.style.overflow="hidden";}
+function modalHide(){if(typeof ADRAF!=="undefined"&&ADRAF){cancelAnimationFrame(ADRAF);ADRAF=null;}document.getElementById("modal").classList.remove("on");document.body.style.overflow="";}
+document.getElementById("mx").onclick=function(){modalHide();};
+document.getElementById("modal").addEventListener("click",function(e){if(e.target===this){modalHide();}});
 
 /* ================= ADS UI ================= */
 var AdsUI={list:[],shown:0,q:"",
@@ -536,7 +543,7 @@ open:function(id){
       '<button class="btn ghost" id="madsvg">⬇ Image ad SVG</button>'+
       '<button class="btn ghost" id="madwebm">⬇ Video ad .webm</button>'+
       '<button class="btn ghost" id="madrd">🔊 Read</button></div>';
-    document.getElementById("modal").classList.add("on");
+    modalShow();
     var cv=document.getElementById("adcanvas"),ctx=cv.getContext("2d"),t0=performance.now();
     if(ADRAF)cancelAnimationFrame(ADRAF);
     (function loop(){var t=((performance.now()-t0)/1000)%plan.seconds;SigArt.drawVideoFrame(ctx,plan,t);ADRAF=requestAnimationFrame(loop);})();
@@ -641,6 +648,7 @@ function route(){
   else if(q.get("tab")){goTab(q.get("tab"));}
 }
 DB.load().then(route,route);
+if(window.innerWidth<768){var sc=document.querySelector(".statscoll");if(sc)sc.removeAttribute("open");}
 </script>
 </body>
 </html>
