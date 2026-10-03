@@ -1,0 +1,95 @@
+{
+ "manifest_version": "JAH-PIXEL-MANIFEST/1.0",
+ "site_id": "SIGNATURE-AI-PIXEL",
+ "site_name": "Signature AI Pixel",
+ "site_url": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/",
+ "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/",
+ "network": {
+  "name": "THE JAH NETWORK",
+  "site_number": 22,
+  "site_count": 27
+ },
+ "generated_at": "2026-10-03T16:18:24Z",
+ "counts": {
+  "goods_total": 11000,
+  "goods_goal": 1000000,
+  "goods_progress": "11000 / 1000000 GOODS",
+  "ads_total": 2850,
+  "categories": 24,
+  "category_counts": {
+   "backpack": 458,
+   "banner": 459,
+   "beach towel": 458,
+   "calendar": 458,
+   "flag": 458,
+   "hat": 459,
+   "hoodie": 458,
+   "keychain": 458,
+   "lunchbox": 458,
+   "mousepad": 458,
+   "mug": 459,
+   "notebook": 458,
+   "number sticker": 459,
+   "phone case": 459,
+   "playing cards": 458,
+   "puzzle": 458,
+   "room poster": 458,
+   "socks": 458,
+   "sticker": 459,
+   "surfboard": 459,
+   "t-shirt": 459,
+   "tote bag": 458,
+   "wall decal": 458,
+   "water bottle": 458
+  },
+  "earliest_good_id": "JAH-GOODS-000001",
+  "latest_good_id": "JAH-GOODS-011000",
+  "earliest_ad_id": "JAH-AD-000001",
+  "latest_ad_id": "JAH-AD-002850"
+ },
+ "identity": {
+  "good_id_pattern": "JAH-GOODS-###### (contiguous from 000001, never reused)",
+  "pixel_id_pattern": "JAH-PIXEL-###### (artwork identity, numerically aligned with JAH-GOODS-######)",
+  "ad_id_pattern": "JAH-AD-###### (contiguous from 000001, never reused)",
+  "video_id_pattern": "JAH-PIXEL-VIDEO-###### (video creative of the same-numbered JAH-AD)"
+ },
+ "engine": {
+  "engine_version": "SIGART-V1",
+  "schema_version": "JAH-PIXEL-RECORD/1.0",
+  "js_url": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/assets/engine.js",
+  "js_sha256": "bb9bbc554a6076e9a6106d392e55bf6a70a08cfc00f8f6cb7962f6c0ff589c58",
+  "py_url": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/assets/sigart.py",
+  "py_sha256": "b10a53d19334b17de20944a850dad631fdea7f591ebc794217e0c9f855b87564",
+  "deterministic": true,
+  "offline_capable": true,
+  "seed_algorithm": "xfnv1a(prompt|style|scene) -> mulberry32",
+  "reproducibility": "PROMPT + NORMALIZED-PROMPT + ENGINE-VERSION + STYLE-VERSION + SEED + SETTINGS => identical output"
+ },
+ "index": {
+  "index_version": "JAH-PIXEL-INDEX/1.0",
+  "goods_index": "data/index/goods.idx.json.gz",
+  "goods_index_rows": 11000,
+  "goods_index_sha256": "58a239d4531ceff2beef0207e47da332bafd80e1d455d0014404d0962254d396",
+  "ads_index": "data/index/ads.idx.json.gz",
+  "ads_index_rows": 2850,
+  "ads_index_sha256": "40d85433b93e9b9529a88b1cedbc288210e8b3ebd95546e4b22b8cdf7d0a0b45"
+ },
+ "deep_links": {
+  "goods": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?goods=JAH-GOODS-000001",
+  "pixel": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?pixel=JAH-PIXEL-000001",
+  "ad": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?ad=JAH-AD-000001",
+  "catalog": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/goods-catalog.html",
+  "feed": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/pixel-catalog.json"
+ },
+ "honesty": {
+  "free_and_unlimited": "image/video GENERATION is free and unlimited; archive STORAGE is bounded by the catalog",
+  "mockup_vs_manufactured": "goods are DESIGN MOCKUPS (printable design mockups), not physically manufactured products",
+  "commerce": "product ads are creative records; an ad does not mean a product is manufactured, stocked, or for sale",
+  "trademark": "engine is designed not to reproduce trademarked characters/logos/brands (abstraction, not a legal guarantee)"
+ },
+ "qa": {
+  "gates": "G1..G5",
+  "status": "PASS",
+  "failed": []
+ }
+}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """build_site_files.py — rebuild sitemap.xml, api.json from data state."""
-import json, os, gzip
+import json, os, gzip, sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/"
@@ -152,6 +152,12 @@ def main():
     rows = all_goods_rows()
     write_catalog_feed(rows, ads)
     write_goods_catalog_html(rows)
+    # authoritative manifest + instant counts + QA gates (fails the build on disagreement)
+    import subprocess as _sp
+    _r = _sp.run([sys.executable, os.path.join(BASE, "code", "build_manifest.py")])
+    if _r.returncode != 0:
+        print("build_manifest.py FAILED — build gates did not pass", file=sys.stderr)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

@@ -5,15 +5,20 @@
  "goods_total": 11000,
  "goods_goal": 1000000,
  "ads_total": 2850,
+ "manifest": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/pixel-manifest.json",
  "engine": {
   "js": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/assets/engine.js",
   "py": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/assets/sigart.py",
+  "version": "SIGART-V1",
   "deterministic": true,
   "offline_capable": true
  },
  "deep_links": {
   "goods": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?goods=JAH-GOODS-000001",
-  "ad": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?ad=JAH-AD-000001"
+  "pixel": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?pixel=JAH-PIXEL-000001",
+  "ad": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?ad=JAH-AD-000001",
+  "catalog": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/goods-catalog.html",
+  "feed": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/pixel-catalog.json"
  },
- "network": "THE JAH NETWORK \u2014 25 sites"
+ "network": "THE JAH NETWORK \u2014 27 sites"
 }
