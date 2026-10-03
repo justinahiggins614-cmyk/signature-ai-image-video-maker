@@ -120,7 +120,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <body>
 <a class="skiplink" href="#main">Skip to content</a>
 <header class="brand">
-<div class="kick">SITE 24 OF 25 · THE JAH NETWORK</div>
+<div class="kick" id="kick">SITE … · THE JAH NETWORK</div>
 <h1>🎨 SIGNATURE AI PIXEL</h1>
 <div class="freebadge">★ FREE AND UNLIMITED ★</div>
 <p class="sub">Type an idea — the Signature art engine renders finished images and animated videos right on your device. No accounts, no credits, no limits. Every piece of art here is original, generated deterministically: the same prompt always makes the same artwork.</p>
@@ -128,7 +128,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <div class="countchip"><b id="cGoods">…</b> / 1,000,000 GOODS</div>
 <div class="countchip"><b id="cAds">…</b> PRODUCT ADS MADE</div>
 <div class="countchip"><b>∞</b> IMAGES &amp; VIDEOS — FREE</div>
-</div></details>
+</div><div id="idxstatus" role="status" aria-live="polite" style="font-size:.82em;color:#b9a8e0;margin-top:6px">LOADING archive counts…</div></details>
 </header>
 <nav class="jahnet" aria-label="JAH Network Global Ecosystem" role="navigation" id="jahnet"></nav>
 <div class="tabs" role="tablist">
@@ -180,6 +180,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <section class="pane" id="pane-image">
 <div class="card">
 <h2>🎨 Image Studio</h2>
+<p class="note" style="margin-top:0"><b>GENERATE</b> (this studio) creates new artwork on your device — it is <b>not</b> automatically archived. <b>ARCHIVE</b> artworks live in the Goods Catalog with permanent JAH-PIXEL IDs.</p>
 <label class="lbl" for="imgprompt">Describe your image</label>
 <textarea id="imgprompt" placeholder="e.g. a lighthouse on a cliff at dusk, waves crashing below"></textarea>
 <div class="row">
@@ -375,16 +376,65 @@ function gz(url){
     return new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).text();});
 }
 var DB={gIdx:null,aIdx:null,gChunks:{},aChunks:{},gInit:false,aInit:false,
+ setStatus:function(msg){var e=document.getElementById("idxstatus");if(e)e.innerHTML=msg;},
+ setCounts:function(g,a,stateLabel){
+  var gf=g==null?"…":g.toLocaleString("en-US"),af=a==null?"…":a.toLocaleString("en-US");
+  document.getElementById("cGoods").textContent=gf;
+  document.getElementById("cAds").textContent=af;
+  document.getElementById("footcount").textContent=gf+" goods · "+af+" ads and counting";
+  this.setStatus(stateLabel);
+ },
+ loadCounts:function(){ /* tiny manifest: instant counters, never blocks on the big index */
+  var self=this;
+  return fetch("data/counts.json").then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();})
+   .then(function(c){
+    try{localStorage.setItem("pixel:counts",JSON.stringify({t:Date.now(),c:c}));}catch(e){}
+    self.setCounts(c.goods_total,c.ads_total,"LIVE — archive counts from manifest · "+esc(c.generated_at.slice(0,10)));
+    return c;
+   });
+ },
+ loadIdxWithTimeout:function(url,ms){
+  return new Promise(function(res,rej){
+   var to=setTimeout(function(){rej(new Error("timeout after "+ms+"ms"));},ms);
+   gz(url).then(function(t){clearTimeout(to);res(t);},function(e){clearTimeout(to);rej(e);});
+  });
+ },
+ loadIndexes:function(tries){
+  var self=this;tries=tries||0;
+  return Promise.all([
+   self.loadIdxWithTimeout("data/index/goods.idx.json.gz",30000).then(function(t){self.gIdx=t.trim().split("\n").map(JSON.parse);}),
+   self.loadIdxWithTimeout("data/index/ads.idx.json.gz",30000).then(function(t){self.aIdx=t.trim().split("\n").map(JSON.parse);})
+  ]).then(function(){
+   self.setCounts(self.gIdx.length,self.aIdx.length,"LIVE — full index verified · "+self.gIdx.length.toLocaleString("en-US")+" goods · "+self.aIdx.length.toLocaleString("en-US")+" ads");
+  },function(e){
+   if(tries<1){return self.loadIndexes(tries+1);}
+   /* fall back to cached counts, honestly labeled */
+   var cached=null;try{cached=JSON.parse(localStorage.getItem("pixel:counts")||"null");}catch(x){}
+   if(cached&&cached.c){
+    var d=new Date(cached.t).toISOString().slice(0,10);
+    self.setCounts(cached.c.goods_total,cached.c.ads_total,
+     'INDEX ERROR — showing <b>cached</b> counts from '+esc(d)+' (not current). <button class="btn" style="padding:4px 10px" onclick="DB.load().then(function(){},function(){})">Retry</button>');
+   }else{
+    self.setCounts(null,null,
+     'INDEX ERROR — the archive index could not be loaded ('+esc(String(e&&e.message||e))+'). <button class="btn" style="padding:4px 10px" onclick="DB.load().then(function(){},function(){})">Retry</button>');
+   }
+   throw e;
+  });
+ },
  load:function(){
   var self=this;
-  return Promise.all([
-   gz("data/index/goods.idx.json.gz").then(function(t){self.gIdx=t.trim().split("\n").map(JSON.parse);}),
-   gz("data/index/ads.idx.json.gz").then(function(t){self.aIdx=t.trim().split("\n").map(JSON.parse);})
-  ]).then(function(){
-   document.getElementById("cGoods").textContent=self.gIdx.length.toLocaleString("en-US");
-   document.getElementById("cAds").textContent=self.aIdx.length.toLocaleString("en-US");
-   document.getElementById("footcount").textContent=self.gIdx.length.toLocaleString("en-US")+" goods · "+self.aIdx.length.toLocaleString("en-US")+" ads and counting";
-  }).catch(function(e){console.warn("index load",e);});
+  return self.loadCounts().then(function(){return self.loadIndexes(0);},function(e){
+   /* counts.json itself failed — try cache, then honest error */
+   var cached=null;try{cached=JSON.parse(localStorage.getItem("pixel:counts")||"null");}catch(x){}
+   if(cached&&cached.c){
+    var d=new Date(cached.t).toISOString().slice(0,10);
+    self.setCounts(cached.c.goods_total,cached.c.ads_total,
+     'OFFLINE — showing <b>cached</b> counts from '+esc(d)+'. <button class="btn" style="padding:4px 10px" onclick="DB.load().then(function(){},function(){})">Retry</button>');
+    return;
+   }
+   self.setCounts(null,null,'INDEX ERROR — archive counts unavailable. <button class="btn" style="padding:4px 10px" onclick="DB.load().then(function(){},function(){})">Retry</button>');
+   throw e;
+  });
  },
  gChunk:function(fn){
   var self=this;
@@ -790,10 +840,25 @@ document.getElementById("qain").addEventListener("keydown",function(e){if(e.key=
 
 /* ================= deep links + boot ================= */
 var ADRAF=null;
+/* network kicker + YOU ARE HERE rendered from the manifest (never hard-coded) */
+(function(){fetch("JAH-NETWORK-MANIFEST.json").then(function(r){return r.json();}).then(function(m){
+  var k=document.getElementById("kick");
+  if(k)k.textContent="SITE "+m.site_number+" OF "+m.site_count+" · THE JAH NETWORK";
+  var here=document.querySelector("#jahnet .here");
+  if(here)here.textContent=m.site_number+" "+m.official_name+" — YOU ARE HERE";
+}).catch(function(){});})();
+function pixelToGoods(id){ /* JAH-PIXEL-###### numerically aligned with JAH-GOODS-###### */
+  var m=/^JAH-PIXEL-(\d{1,6})$/.exec(String(id||"").toUpperCase());
+  return m?("JAH-GOODS-"+("000000"+m[1]).slice(-6)):null;
+}
 function route(){
   var q=new URLSearchParams(location.search);
   function whenReady(flag,fn){var t=setInterval(function(){if(DB[flag]){clearInterval(t);fn();}},300);}
-  if(q.get("goods")){goTab("goods");whenReady("gIdx",function(){GoodsUI.open(q.get("goods"));});}
+  if(q.get("pixel")){var g=pixelToGoods(q.get("pixel"));
+    if(g){goTab("goods");whenReady("gIdx",function(){GoodsUI.open(g);});}
+    else{goTab("goods");var st=document.getElementById("idxstatus");if(st)st.textContent="PIXEL NOT FOUND — no artwork "+q.get("pixel");}
+  }
+  else if(q.get("goods")){goTab("goods");whenReady("gIdx",function(){GoodsUI.open(q.get("goods"));});}
   else if(q.get("ad")){goTab("ads");whenReady("aIdx",function(){AdsUI.open(q.get("ad"));});}
   else if(q.get("tab")){goTab(q.get("tab"));}
 }
