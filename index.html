@@ -100,11 +100,19 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 @keyframes sp{to{transform:rotate(360deg)}}
 .skiplink{position:absolute;left:-9999px}
 .skiplink:focus{left:8px;top:8px;background:var(--acc);color:#000;padding:8px 14px;border-radius:8px;z-index:99}
+/* ---- batch-E 10-fix pass: kicker, status badges, record panel, AI identity ---- */
+.kick{color:var(--gold);letter-spacing:2px;font-size:12px;margin:0 0 8px}
+.sbadge{display:inline-block;background:#0d0722;border:1px solid var(--gold);color:var(--gold);font-size:11px;font-weight:bold;letter-spacing:1px;padding:3px 12px;border-radius:14px}
+.recpanel{display:flex;flex-wrap:wrap;gap:8px 18px;background:#0d0722;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:12px;color:var(--dim);align-items:center}
+.recpanel .rp b{color:var(--gold);font-weight:bold;margin-right:4px}
+.aicard{background:#0d0722;border:1px solid var(--gold);border-radius:10px;padding:12px 14px;margin:0 0 12px;font-size:13px}
+.aicard b{color:var(--gold)}
 </style>
 </head>
 <body>
 <a class="skiplink" href="#main">Skip to content</a>
 <header class="brand">
+<div class="kick">SITE 24 OF 25 · THE JAH NETWORK</div>
 <h1>🎨 SIGNATURE AI PIXEL</h1>
 <div class="freebadge">★ FREE AND UNLIMITED ★</div>
 <p class="sub">Type an idea — the Signature art engine renders finished images and animated videos right on your device. No accounts, no credits, no limits. Every piece of art here is original, generated deterministically: the same prompt always makes the same artwork.</p>
@@ -275,6 +283,9 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <section class="pane" id="pane-ask">
 <div class="card">
 <h2>❓ Ask about Signature AI Pixel</h2>
+<div class="aicard" aria-label="AI identity card">🤖 <b>Pixel Guide</b> — the AI that talks here.<br>
+<span style="color:#b9a8e0"><b>Duties:</b> explains how image and video generation works here, walks you through the goods catalog and product ads, shows you how to take the engine offline, and keeps generation honest — no trademarked characters or logos are reproduced. Answers from this site's own data only.
+<b>Engine:</b> grounded on-page Q&amp;A with the shared JAHtalk conversational voice. It claims no canon JAH-AI ID.</span></div>
 <div class="qa">
 <div id="qalog"><div class="a">Ask me anything — how generation works, what the goods catalog holds, how ads are made, or how to take the engine with you.</div></div>
 <div class="row"><input type="text" id="qain" placeholder="Ask a question…" aria-label="Ask a question"><button class="btn" id="qago">Ask</button></div>
@@ -300,8 +311,7 @@ var B="https://justinahiggins614-cmyk.github.io/";
 var S=[[1,"The Signature AI Phone Book","jah-ai-models/"],[2,"Calculator","jah-calculator/"],[3,"Dictionary","jah-dictionary/"],[4,"JAH Wiki","jah-wiki/"],[5,"JAH-N Wiki","jah-n-wiki-leaks/"],[6,"Patent Catalog","cyber-patent-catalog/"],[7,"Spec Catalog","signature-one-archive/specs.html"],[8,"Signature Llama","signature-llama/"],[9,"PC Depository","jah-computer-systems/"],[10,"Cyber Mega-Mall","signature-cyber-mega-mall/"],[11,"Signature University","signature-university/"],[12,"Book Depository","signature-books/"],[13,"Comic Store","signature-comics/"],[14,"Global Newspaper Archive","signature-newspapers/"],[15,"3D Print Depository","signature-3d-print/"],[16,"Mad Scientist Lab","signature-backend/"],[17,"Boundless Generator Archive","signature-boundless-generators/"],[18,"AI Mix Lab","signature-ai-mixlab/"],[19,"AI Olypics","signature-ai-olypics/"],[20,"Chip Maker and Archive","signature-chip-maker/"],[21,"App Archive","signature-app-archive/"],[22,"AI Robot Matcher","signature-ai-robot-matcher/"],[23,"Experiment Solver","signature-experiment-solver/"],[25,"Signature Music Studio","signature-ai-song-maker/"]];
 var h='<div style="width:100%;text-align:center;color:#b9a8e0;margin-bottom:6px">THE JAH NETWORK</div>';
 S.forEach(function(x){
-  var soon=(x[0]===25);
-  h+=soon?'<span class="soon">'+x[0]+' '+x[1]+' <span class="soonpill">SOON</span></span>':'<a href="'+B+x[2]+'">'+x[0]+' '+x[1]+'</a>';
+  h+='<a href="'+B+x[2]+'">'+x[0]+' '+x[1]+'</a>';
 });
 h+='<span class="here">24 Signature AI Pixel — YOU ARE HERE</span>';
 document.getElementById("jahnet").innerHTML=h;
@@ -502,6 +512,7 @@ document.getElementById("vidread").onclick=function(){if(VID.plan)rdSpeak("Signa
 var GoodsUI={list:[],shown:0,filter:{q:"",cat:"",az:""},
 init:function(){
   DB.gInit=true;
+  document.getElementById("ggrid").innerHTML="<p role='status'><span class='spin'></span> Loading goods catalog…</p>";
   var cats=SigArt.GOOD_CATS,sel=document.getElementById("gcat");
   cats.forEach(function(c){var o=document.createElement("option");o.value=c;o.textContent=c;sel.appendChild(o);});
   var az=document.getElementById("gaz");az.innerHTML="";
@@ -562,16 +573,27 @@ open:function(id){
     var art;try{art=SigArt.composeImage(g.prompt,{});}catch(e){art=null;}
     goodsJSONLD(g); /* FIX-01: per-good MediaObject schema for crawlers */
     document.getElementById("mbody").innerHTML=
-      "<h2>"+esc(g.name)+"</h2><p style='color:#b9a8e0'>"+g.id+" · "+esc(g.cat)+"</p>"+
+      "<h2>"+esc(g.name)+"</h2>"+
+      "<p><span class='sbadge'>GENERATED</span></p>"+
+      "<p style='color:#b9a8e0'>"+g.id+" · "+esc(g.cat)+"</p>"+
+      '<div class="recpanel" aria-label="Record panel">'+
+      '<span class="rp"><b>STATUS</b> GENERATED</span>'+
+      '<span class="rp"><b>ID</b> '+g.id+'</span>'+
+      '<span class="rp"><b>VERSION</b> v1.0</span>'+
+      '<span class="rp"><b>SOURCE</b> Signature AI Pixel · goods engine</span>'+
+      '<span class="rp"><b>OPEN</b> <button class="btn ghost" id="mgopen">open ↗</button></span>'+
+      '<span class="rp"><b>SHARE</b> <button class="btn ghost" id="mgshare">share</button></span></div>'+
       (art?SigArt.mockupSVG(g.cat,art,g.seed):"<p>Preview unavailable for this good.</p>")+
       "<p>"+esc(g.desc)+"</p>"+
       '<p class="warnline">⚠️ Design mockup — not a physical product. Download the design file; no item ships.</p>'+
-      (art?"<p style='font-size:12px;color:#b9a8e0'>Art seed "+art.seedHex+" · "+esc(art.palette)+" · deterministic — the downloadable engine renders this exact design.</p>":"")+
+      (art?"<p class='provenance'>⚙️ <b>Provenance:</b> made by the Pixel goods engine · art seed "+art.seedHex+" · "+esc(art.palette)+" · deterministic — the downloadable engine renders this exact design.</p>":"")+
       '<div class="row"><button class="btn gold" id="mgdl">⬇ Download design SVG</button>'+
       '<button class="btn ghost" id="mgpng">⬇ PNG</button>'+
       '<button class="btn ghost" id="mgcp">📋 Copy</button>'+
       '<button class="btn ghost" id="mgrd">🔊 Read</button></div>';
     modalShow();
+    document.getElementById("mgopen").onclick=function(){window.open("?goods="+encodeURIComponent(g.id),"_blank","noopener");};
+    document.getElementById("mgshare").onclick=function(){pxShare("?goods="+encodeURIComponent(g.id),g.id+" — "+g.name);};
     document.getElementById("mgdl").onclick=function(){if(!art)return;var b=new Blob([SigArt.mockupSVG(g.cat,art,g.seed)],{type:"image/svg+xml"});SigArt.download(URL.createObjectURL(b),g.id+".svg");};
     document.getElementById("mgpng").onclick=function(){if(!art)return;SigArt.svgToPng(SigArt.mockupSVG(g.cat,art,g.seed),600,600).then(function(bl){SigArt.download(URL.createObjectURL(bl),g.id+".png");},function(){var d=document.createElement("p");d.textContent="PNG export failed in this browser — the SVG download above works everywhere.";document.getElementById("mbody").appendChild(d);});};
     document.getElementById("mgcp").onclick=function(){var t=g.id+" — "+g.name+" ("+g.cat+")\n"+g.desc+(art?"\nArt seed: "+art.seedHex:"");(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){alert("Copied!");},function(){prompt("Copy:",t);});};
@@ -589,6 +611,11 @@ function goodsJSONLD(g){
   s.textContent=j;document.head.appendChild(s);
 }
 function modalShow(){document.getElementById("modal").classList.add("on");document.body.style.overflow="hidden";}
+function pxShare(qs,title){
+  var url=location.origin+location.pathname+qs;
+  if(navigator.share){try{navigator.share({title:title,url:url});}catch(e){}return;}
+  (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(function(){alert("Link copied — share it anywhere!");},function(){prompt("Copy link:",url);});
+}
 function modalHide(){if(typeof ADRAF!=="undefined"&&ADRAF){cancelAnimationFrame(ADRAF);ADRAF=null;}var old=document.getElementById("goodsjsonld");if(old)old.parentNode.removeChild(old);document.getElementById("modal").classList.remove("on");document.body.style.overflow="";}
 document.getElementById("mx").onclick=function(){modalHide();};
 document.getElementById("modal").addEventListener("click",function(e){if(e.target===this){modalHide();}});
@@ -597,6 +624,7 @@ document.getElementById("modal").addEventListener("click",function(e){if(e.targe
 var AdsUI={list:[],shown:0,q:"",
 init:function(){
   DB.aInit=true;
+  document.getElementById("agrid").innerHTML="<p role='status'><span class='spin'></span> Loading product ads…</p>";
   document.getElementById("ago").onclick=function(){AdsUI.q=document.getElementById("aq").value.trim().toLowerCase();AdsUI.apply();};
   document.getElementById("aq").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("ago").click();});
   document.getElementById("amore").onclick=function(){AdsUI.renderMore();};
@@ -637,15 +665,27 @@ open:function(id){
     var svg=SigArt.adCreative(a);
     var plan=SigArt.planVideo(a.product.name+" — "+a.tagline,{seconds:a.video_seconds,caption:a.product.name});
     document.getElementById("mbody").innerHTML=
-      "<h2>Ad "+a.id+"</h2><p style='color:#b9a8e0'>Advertises: <b>"+esc(a.product.name)+"</b> ("+esc(a.product.site)+" · "+esc(a.product.pid)+")</p>"+
+      "<h2>Ad "+a.id+"</h2>"+
+      "<p><span class='sbadge'>GENERATED</span></p>"+
+      "<p style='color:#b9a8e0'>Advertises: <b>"+esc(a.product.name)+"</b> ("+esc(a.product.site)+" · "+esc(a.product.pid)+")</p>"+
+      '<div class="recpanel" aria-label="Record panel">'+
+      '<span class="rp"><b>STATUS</b> GENERATED</span>'+
+      '<span class="rp"><b>ID</b> '+a.id+'</span>'+
+      '<span class="rp"><b>VERSION</b> v1.0</span>'+
+      '<span class="rp"><b>SOURCE</b> Signature AI Pixel · ad engine</span>'+
+      '<span class="rp"><b>OPEN</b> <button class="btn ghost" id="madopen">open ↗</button></span>'+
+      '<span class="rp"><b>SHARE</b> <button class="btn ghost" id="madshare">share</button></span></div>'+
       svg+
       '<p class="warnline">⚠️ Generated creative — a mock ad made by the engine, not an actual commercial listing. Nothing is for sale.</p>'+
+      "<p class='provenance'>⚙️ <b>Provenance:</b> auto-made by the Pixel ad engine · stored as made · deterministic from the product record.</p>"+
       "<h3>Video ad ("+a.video_seconds+"s)</h3><canvas id='adcanvas' width='1280' height='720' style='width:100%;border-radius:12px'></canvas>"+
       '<div class="row"><button class="btn gold" id="madpng">⬇ Image ad PNG</button>'+
       '<button class="btn ghost" id="madsvg">⬇ Image ad SVG</button>'+
       '<button class="btn ghost" id="madwebm">⬇ Video ad .webm</button>'+
       '<button class="btn ghost" id="madrd">🔊 Read</button></div>';
     modalShow();
+    document.getElementById("madopen").onclick=function(){window.open("?ad="+encodeURIComponent(a.id),"_blank","noopener");};
+    document.getElementById("madshare").onclick=function(){pxShare("?ad="+encodeURIComponent(a.id),"Ad "+a.id+" — "+a.product.name);};
     var cv=document.getElementById("adcanvas"),ctx=cv.getContext("2d"),t0=performance.now();
     if(ADRAF)cancelAnimationFrame(ADRAF);
     (function loop(){var t=((performance.now()-t0)/1000)%plan.seconds;SigArt.drawVideoFrame(ctx,plan,t);ADRAF=requestAnimationFrame(loop);})();

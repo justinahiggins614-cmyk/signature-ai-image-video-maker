@@ -98,10 +98,10 @@ def write_goods_catalog_html(goods):
     for c in sorted(cats):
         rows = cats[c]
         parts.append(f'<h2 id="{esc_h(c)}">{esc_h(c)} ({len(rows)})</h2>')
-        parts.append('<table><tr><th>ID</th><th>Name</th><th>Description</th></tr>')
+        parts.append('<table><tr><th>ID</th><th>Name</th><th>Description</th><th>Status</th></tr>')
         for (i, n, d) in rows:
             parts.append(f'<tr><td class="id"><a href="{SITE}?goods={esc_h(i)}">{esc_h(i)}</a></td>'
-                         f'<td>{esc_h(n)}</td><td>{esc_h(d)}</td></tr>')
+                         f'<td>{esc_h(n)}</td><td>{esc_h(d)}</td><td>GENERATED</td></tr>')
         parts.append('</table>')
     parts.append('</body></html>')
     p = os.path.join(BASE, "goods-catalog.html")
