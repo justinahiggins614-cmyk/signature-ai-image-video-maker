@@ -82,6 +82,15 @@ label.lbl{display:block;color:var(--dim);font-size:13px;margin:12px 0 6px}
 #ttsbar{position:fixed;bottom:0;left:0;right:0;background:#140b2ed9;border-top:1px solid var(--acc);padding:10px 16px;display:none;z-index:60;font-size:14px}
 #ttsbar button{background:transparent;border:1px solid var(--acc);color:var(--acc);border-radius:8px;padding:6px 12px;margin-left:8px;cursor:pointer}
 .qa{display:flex;flex-direction:column;gap:8px}
+.homegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:16px}
+.hcard{margin:0;display:flex;flex-direction:column}
+.hcard h3{margin:0 0 8px;font-size:17px}
+.hcard p{font-size:13px;line-height:1.6;color:var(--txt)}
+.hcard .hu{font-size:12px;color:var(--dim);line-height:1.5}
+.hcard .btn{margin-top:auto;align-self:flex-start}
+.warnline{font-size:12px;color:#ffe3a3;background:#2a1a08;border:1px solid var(--gold);border-radius:10px;padding:8px 12px;margin-top:10px;line-height:1.5}
+.resline{margin:5px 0;font-size:13px;line-height:1.5}
+.resline b{color:var(--gold)}
 #qalog{background:#0d0722;border:1px solid var(--line);border-radius:10px;padding:12px;min-height:160px;max-height:320px;overflow:auto;font-size:14px}
 #qalog .q{color:var(--gold);margin:8px 0 2px}
 #qalog .a{color:var(--txt);margin:0 0 8px;line-height:1.5}
@@ -107,7 +116,8 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 </header>
 <nav class="jahnet" aria-label="JAH Network Global Ecosystem" role="navigation" id="jahnet"></nav>
 <div class="tabs" role="tablist">
-<button class="on" data-tab="image" role="tab">🎨 Make an Image</button>
+<button class="on" data-tab="home" role="tab">🏠 Home</button>
+<button data-tab="image" role="tab">🎨 Make an Image</button>
 <button data-tab="video" role="tab">🎬 Make a Video</button>
 <button data-tab="goods" role="tab">🛍️ Goods Catalog</button>
 <button data-tab="ads" role="tab">📢 Product Ads</button>
@@ -116,8 +126,42 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 </div>
 <main id="main">
 
+<!-- HOME / LANDING — four cards so the user never wonders what they're generating -->
+<section class="pane on" id="pane-home">
+<div class="card">
+<h2>🏠 What do you want to make?</h2>
+<p class="sub">Four tools, one engine. Pick what you're generating — you'll always know exactly what comes out.</p>
+<div class="homegrid">
+<div class="card hcard">
+<h3>🎨 Make an Image</h3>
+<p>Type words, get a finished picture. Deterministic SVG art rendered on your device. Free and unlimited.</p>
+<p class="hu">You get: the image + a result record (prompt, settings, seed) + SVG/PNG downloads + regenerate.</p>
+<button class="btn" onclick="goTab('image')">Make an image →</button>
+</div>
+<div class="card hcard">
+<h3>🎬 Make a Video</h3>
+<p>Type words, get a moving scene. Live canvas animation rendered on your device; export to .webm.</p>
+<p class="hu">⚠️ .webm export needs Chrome/Edge on desktop. Needs HTML5 canvas + MediaRecorder before you generate.</p>
+<button class="btn" onclick="goTab('video')">Make a video →</button>
+</div>
+<div class="card hcard">
+<h3>🛍️ Goods Catalog</h3>
+<p>Printable design mockups — posters, shirts, stickers, surfboards and more, marching to 1,000,000.</p>
+<p class="hu">⚠️ Design files, not physical products. Nothing is manufactured, shipped, or for sale — every design downloads free.</p>
+<button class="btn" onclick="goTab('goods')">Browse goods →</button>
+</div>
+<div class="card hcard">
+<h3>📢 Product Ads</h3>
+<p>Auto-made ad creatives for Signature products — an image ad and a video ad per product, stored as made.</p>
+<p class="hu">⚠️ Generated mock creatives, not live commercial listings. Nothing is for sale here.</p>
+<button class="btn" onclick="goTab('ads')">Browse ads →</button>
+</div>
+</div>
+</div>
+</section>
+
 <!-- IMAGE STUDIO -->
-<section class="pane on" id="pane-image">
+<section class="pane" id="pane-image">
 <div class="card">
 <h2>🎨 Image Studio</h2>
 <label class="lbl" for="imgprompt">Describe your image</label>
@@ -135,6 +179,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <div class="row" id="imgtools" style="display:none">
 <button class="btn gold" id="imgdlpng">⬇ Download PNG</button>
 <button class="btn ghost" id="imgdlsvg">⬇ Download SVG</button>
+<button class="btn ghost" id="imgregen">🔁 Regenerate</button>
 <button class="btn ghost" id="imgcopy">📋 Copy prompt + settings</button>
 <button class="btn ghost" id="imgread">🔊 Read description</button>
 </div>
@@ -260,7 +305,7 @@ document.getElementById("jahnet").innerHTML=h;
 })();
 
 /* ================= tabs ================= */
-var TAB="image";
+var TAB="home";
 document.querySelectorAll(".tabs button").forEach(function(b){
   b.addEventListener("click",function(){
     document.querySelectorAll(".tabs button").forEach(function(x){x.classList.remove("on");});
@@ -354,8 +399,13 @@ document.getElementById("imggo").onclick=function(){
     IMG.art=art;IMG.expanded=exp;
     document.getElementById("imgprev").innerHTML=art.svg;
     document.getElementById("imgtools").style.display="flex";
-    var prov="Seed <b>"+art.seedHex+"</b> · palette <b>"+esc(art.palette)+"</b> · scene <b>"+esc(art.scene)+"</b><br>Prompt path: <b>"+esc(exp.source)+"</b>"+(exp.text!==p?"<br>Enhanced prompt: "+esc(exp.text):"");
-    if(art.guarded)prov+='<br>🛡️ '+esc(art.guardNote);
+    /* FIX: image result panel — prompt, settings, seed, output spelled out */
+    var prov='<div class="resline"><b>Prompt:</b> '+esc(p)+'</div>'+
+      '<div class="resline"><b>Settings:</b> style '+esc(style)+' · caption '+(cap?esc(cap):"none")+'</div>'+
+      '<div class="resline"><b>Seed:</b> '+art.seedHex+' — same prompt + settings always makes this exact art</div>'+
+      '<div class="resline"><b>Output:</b> SVG art · PNG export 1200×800</div>';
+    if(exp.text!==p)prov+='<div class="resline"><b>Enhanced prompt:</b> '+esc(exp.text)+' <span style="color:#b9a8e0">('+esc(exp.source)+')</span></div>';
+    if(art.guarded)prov+='<div class="resline">🛡️ '+esc(art.guardNote)+'</div>';
     document.getElementById("imgprov").innerHTML=prov;
     btn.disabled=false;btn.textContent="✨ GENERATE IMAGE";
   }
@@ -374,6 +424,7 @@ document.getElementById("imgdlpng").onclick=function(){
     SigArt.download(URL.createObjectURL(blob),"sigart-"+IMG.art.seedHex+".png");btn.disabled=false;
   },function(e){btn.disabled=false;document.getElementById("imgprov").innerHTML="<p>PNG export failed in this browser ("+esc(String(e&&e.message||e))+") — the SVG download works everywhere.</p>";});
 };
+document.getElementById("imgregen").onclick=function(){document.getElementById("imggo").click();};
 document.getElementById("imgcopy").onclick=function(){
   if(!IMG.art)return;
   var t="Prompt: "+IMG.art.prompt+"\nStyle: "+IMG.art.palette+"\nScene: "+IMG.art.scene+"\nSeed: "+IMG.art.seedHex+"\nSource: "+IMG.expanded.source;
