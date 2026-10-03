@@ -14,8 +14,11 @@
 "description":"Signature AI Pixel — free and unlimited AI image and video generation with a deterministic on-device art engine."}
 </script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Dataset","name":"Signature AI Pixel","creator":{"@type":"Person","name":"Justin Addam Higgins"}}
+{"@context":"https://schema.org","@type":"Dataset","name":"Signature AI Pixel","creator":{"@type":"Person","name":"Justin Addam Higgins"},
+"distribution":{"@type":"DataDownload","contentUrl":"https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/pixel-catalog.json","encodingFormat":"application/json","name":"pixel-catalog.json — every good, machine-readable"},
+"mainEntity":{"@type":"ItemList","name":"Signature AI Pixel Goods Catalog","url":"https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/goods-catalog.html"}}
 </script>
+<link rel="alternate" type="application/json" title="Signature AI Pixel goods catalog feed" href="data/pixel-catalog.json">
 <script src="assets/engine.js"></script>
 <script src="js/jah-talk-fallback.js"></script>
 <style>
@@ -57,21 +60,25 @@ label.lbl{display:block;color:var(--dim);font-size:13px;margin:12px 0 6px}
 #vidcanvas{max-width:100%;border-radius:12px;border:1px solid var(--line);background:#000}
 .provenance{font-size:12px;color:var(--dim);margin-top:10px;line-height:1.6}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:16px}
-.gcard{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer}
-.gcard svg{width:100%;display:block}
+@media(min-width:481px) and (max-width:767px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}}
+@media(max-width:480px){.grid{grid-template-columns:1fr}}
+.gcard{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;min-height:44px}
+.gcard svg{width:100%;height:auto;display:block;aspect-ratio:1/1;background:#0d0722}
 .gcard .t{padding:10px 12px;font-size:13px}
 .gcard .t b{display:block;font-size:14px;margin-bottom:4px}
 .gcard .id{color:var(--dim);font-size:11px}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px}
 .toolbar input[type=text]{width:auto;flex:1;min-width:180px}
-.az{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;position:sticky;top:0;z-index:30;background:#0a0618;padding:8px 0}
+.gstick{position:sticky;top:0;z-index:32;background:#0a0618;padding:8px 0 2px}
+#gcount{font-size:12px;color:var(--dim);white-space:nowrap}
+.az{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;background:#0a0618;padding:8px 0}
 .az button{background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:8px;padding:5px 9px;cursor:pointer}
 .az button.on{color:var(--acc);border-color:var(--acc)}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:50;padding:12px}
 .modal.on{display:flex}
 .modal .box{background:var(--card);border:1px solid var(--line);border-radius:16px;max-width:860px;width:100%;max-height:92vh;overflow:auto;padding:20px}
 .modal .box svg{max-width:100%}
-.x{float:right;background:transparent;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:6px 12px;cursor:pointer}
+.x{float:right;background:transparent;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:6px 12px;cursor:pointer;min-width:44px;min-height:44px}
 #ttsbar{position:fixed;bottom:0;left:0;right:0;background:#140b2ed9;border-top:1px solid var(--acc);padding:10px 16px;display:none;z-index:60;font-size:14px}
 #ttsbar button{background:transparent;border:1px solid var(--acc);color:var(--acc);border-radius:8px;padding:6px 12px;margin-left:8px;cursor:pointer}
 .qa{display:flex;flex-direction:column;gap:8px}
@@ -166,12 +173,15 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <div class="card">
 <h2>🛍️ Goods Catalog — a million potential goods</h2>
 <p class="sub">Every way an image can live in the world: posters, stickers, shirts, surfboards and more. Each good carries original Signature art as a printable design mockup — free to download.</p>
+<div class="gstick">
 <div class="toolbar">
 <input type="text" id="gq" placeholder="Search goods…" aria-label="Search goods">
 <select id="gcat" aria-label="Category"><option value="">All categories</option></select>
 <button class="btn" id="ggo">Search</button>
+<span id="gcount" role="status" aria-live="polite"></span>
 </div>
 <div class="az" id="gaz"></div>
+</div>
 <div class="grid" id="ggrid"></div>
 <div class="row"><button class="btn ghost" id="gmore" style="display:none">Load more</button></div>
 </div>
@@ -232,6 +242,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <p><b>SIGNATURE AI PIXEL</b> — free and unlimited image &amp; video generation, a million potential goods, and auto-made product ads.</p>
 <p>All artwork is original and generated deterministically on your device. Nothing here reproduces trademarked characters, logos or brands — trademarked names in prompts render as original Signature-style abstractions. The image generator is free and unlimited; the Llama model itself is "currently free for all internet tasks" per the Signature Llama site.</p>
 <p>Part of <b>THE JAH NETWORK</b> · <span id="footcount"></span></p>
+<p>Catalog indexes: <a href="goods-catalog.html">static goods index</a> · <a href="data/pixel-catalog.json">pixel-catalog.json machine feed</a></p>
 </footer>
 
 <script>
@@ -336,7 +347,10 @@ document.getElementById("imggo").onclick=function(){
   var useLlama=document.getElementById("imgenhance").checked;
   function render(exp){
     var g=SigArt.guard(p);
-    var art=SigArt.composeImage(exp.text,{style:style,caption:cap||undefined});
+    var art;
+    try{art=SigArt.composeImage(exp.text,{style:style,caption:cap||undefined});}
+    catch(e){btn.disabled=false;btn.textContent="✨ GENERATE IMAGE";
+      document.getElementById("imgprev").innerHTML="<p>Couldn't render that one — try a simpler prompt, or a different browser. Your words are still in the box above.</p>";return;}
     IMG.art=art;IMG.expanded=exp;
     document.getElementById("imgprev").innerHTML=art.svg;
     document.getElementById("imgtools").style.display="flex";
@@ -358,7 +372,7 @@ document.getElementById("imgdlpng").onclick=function(){
   var btn=this;btn.disabled=true;
   SigArt.svgToPng(IMG.art.svg,1200,800).then(function(blob){
     SigArt.download(URL.createObjectURL(blob),"sigart-"+IMG.art.seedHex+".png");btn.disabled=false;
-  },function(e){alert("PNG export failed: "+e.message);btn.disabled=false;});
+  },function(e){btn.disabled=false;document.getElementById("imgprov").innerHTML="<p>PNG export failed in this browser ("+esc(String(e&&e.message||e))+") — the SVG download works everywhere.</p>";});
 };
 document.getElementById("imgcopy").onclick=function(){
   if(!IMG.art)return;
@@ -378,19 +392,26 @@ document.getElementById("vidgo").onclick=function(){
   var p=document.getElementById("vidprompt").value.trim();
   if(!p){alert("Describe your video first.");return;}
   stopPrev();
-  var plan=SigArt.planVideo(p,{seconds:parseInt(document.getElementById("vidsec").value,10),caption:document.getElementById("vidcap").value.trim()||undefined});
+  /* FIX-05: honest feature check — no canvas, no silent failure */
+  var cv=document.getElementById("vidcanvas"),ctx=null;
+  try{ctx=cv.getContext("2d");}catch(e){ctx=null;}
+  if(!ctx){document.getElementById("vidprov").innerHTML="<p>This browser can't run the video canvas — the Video Studio needs HTML5 canvas. Try Chrome or Edge.</p>";return;}
+  var plan;
+  try{plan=SigArt.planVideo(p,{seconds:parseInt(document.getElementById("vidsec").value,10),caption:document.getElementById("vidcap").value.trim()||undefined});}
+  catch(e){document.getElementById("vidprov").innerHTML="<p>Couldn't build that video — try a simpler prompt or a different browser. Your words are still in the box above.</p>";return;}
   VID.plan=plan;
-  var cv=document.getElementById("vidcanvas");cv.style.display="block";
-  var ctx=cv.getContext("2d"),t0=performance.now();
+  cv.style.display="block";
+  var t0=performance.now();
   VID.playing=true;
   (function loop(){
     if(!VID.playing)return;
     var t=((performance.now()-t0)/1000)%plan.seconds;
-    SigArt.drawVideoFrame(ctx,plan,t);
+    try{SigArt.drawVideoFrame(ctx,plan,t);}
+    catch(e){VID.playing=false;document.getElementById("vidprov").innerHTML="<p>Playback stopped on an error — your prompt is saved above; try again or switch browsers.</p>";return;}
     VID.raf=requestAnimationFrame(loop);
   })();
   document.getElementById("vidtools").style.display="flex";
-  var prov="Seed <b>"+plan.seedHex+"</b> · palette <b>"+esc(plan.palette)+"</b> · "+plan.seconds+"s @ 15fps · deterministic";
+  var prov="<p><span class='spin'></span> Playing — "+plan.seconds+"s deterministic loop. Same prompt always makes the same video.</p>Seed <b>"+plan.seedHex+"</b> · palette <b>"+esc(plan.palette)+"</b> · "+plan.seconds+"s @ 15fps · deterministic";
   if(plan.guarded)prov+='<br>🛡️ '+esc(plan.guardNote);
   document.getElementById("vidprov").innerHTML=prov;
 };
@@ -402,7 +423,7 @@ document.getElementById("viddl").onclick=function(){
   setTimeout(function(){
     SigArt.exportWebm(cv,VID.plan,function(blob,err){
       btn.disabled=false;btn.textContent="⬇ Download .webm";
-      if(err||!blob){alert(err||"Export failed.");return;}
+      if(err||!blob){document.getElementById("vidprov").innerHTML="<p>Video export isn't available in this browser — the live preview above still plays fine. Chrome or Edge on desktop is recommended for .webm export.</p>";return;}
       SigArt.download(URL.createObjectURL(blob),"sigvid-"+VID.plan.seedHex+".webm");
       /* resume preview */
       document.getElementById("vidgo").click();
@@ -430,18 +451,25 @@ init:function(){
     az.appendChild(b);
   });
   document.getElementById("ggo").onclick=function(){GoodsUI.filter.q=document.getElementById("gq").value.trim().toLowerCase();GoodsUI.filter.cat=document.getElementById("gcat").value;GoodsUI.apply();};
+  /* FIX-06: instant keyword search (debounced) + live category filtering */
+  function pullFilter(){GoodsUI.filter.q=document.getElementById("gq").value.trim().toLowerCase();GoodsUI.filter.cat=document.getElementById("gcat").value;}
+  var deb=null;
+  document.getElementById("gq").addEventListener("input",function(){clearTimeout(deb);deb=setTimeout(function(){pullFilter();GoodsUI.apply();},200);});
+  document.getElementById("gcat").addEventListener("change",function(){pullFilter();GoodsUI.apply();});
   document.getElementById("gq").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("ggo").click();});
   document.getElementById("gmore").onclick=function(){GoodsUI.renderMore();};
   DB.load().then(function(){GoodsUI.apply();});
 },
 apply:function(){
   var f=this.filter;
+  if(!DB.gIdx){document.getElementById("ggrid").innerHTML="<p>Couldn't load the goods catalog — this browser may not support gzip streaming (DecompressionStream). Try Chrome or Edge, or browse the <a href='goods-catalog.html'>static goods index</a>.</p>";document.getElementById("gmore").style.display="none";return;}
   this.list=DB.gIdx.filter(function(r){
     if(f.cat&&r[2]!==f.cat)return false;
     if(f.az&&r[1][0].toUpperCase()!==f.az)return false;
     if(f.q&&(r[1]+" "+r[2]+" "+r[0]).toLowerCase().indexOf(f.q)<0)return false;
     return true;
   });
+  document.getElementById("gcount").textContent=this.list.length.toLocaleString("en-US")+" of "+DB.gIdx.length.toLocaleString("en-US")+" goods";
   this.shown=0;document.getElementById("ggrid").innerHTML="";
   this.renderMore();
 },
@@ -471,25 +499,36 @@ open:function(id){
   var row=DB.gIdx.find(function(r){return r[0]===id;});if(!row)return;
   DB.gChunk(row[3]).then(function(m){
     var g=m[id];if(!g)return;
-    var art=SigArt.composeImage(g.prompt,{});
+    var art;try{art=SigArt.composeImage(g.prompt,{});}catch(e){art=null;}
+    goodsJSONLD(g); /* FIX-01: per-good MediaObject schema for crawlers */
     document.getElementById("mbody").innerHTML=
       "<h2>"+esc(g.name)+"</h2><p style='color:#b9a8e0'>"+g.id+" · "+esc(g.cat)+"</p>"+
-      SigArt.mockupSVG(g.cat,art,g.seed)+
+      (art?SigArt.mockupSVG(g.cat,art,g.seed):"<p>Preview unavailable for this good.</p>")+
       "<p>"+esc(g.desc)+"</p>"+
-      "<p style='font-size:12px;color:#b9a8e0'>Art seed "+art.seedHex+" · "+esc(art.palette)+" · deterministic — the downloadable engine renders this exact design.</p>"+
+      (art?"<p style='font-size:12px;color:#b9a8e0'>Art seed "+art.seedHex+" · "+esc(art.palette)+" · deterministic — the downloadable engine renders this exact design.</p>":"")+
       '<div class="row"><button class="btn gold" id="mgdl">⬇ Download design SVG</button>'+
       '<button class="btn ghost" id="mgpng">⬇ PNG</button>'+
       '<button class="btn ghost" id="mgcp">📋 Copy</button>'+
       '<button class="btn ghost" id="mgrd">🔊 Read</button></div>';
     modalShow();
-    document.getElementById("mgdl").onclick=function(){var b=new Blob([SigArt.mockupSVG(g.cat,art,g.seed)],{type:"image/svg+xml"});SigArt.download(URL.createObjectURL(b),g.id+".svg");};
-    document.getElementById("mgpng").onclick=function(){SigArt.svgToPng(SigArt.mockupSVG(g.cat,art,g.seed),600,600).then(function(bl){SigArt.download(URL.createObjectURL(bl),g.id+".png");});};
-    document.getElementById("mgcp").onclick=function(){var t=g.id+" — "+g.name+" ("+g.cat+")\n"+g.desc+"\nArt seed: "+art.seedHex;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){alert("Copied!");},function(){prompt("Copy:",t);});};
+    document.getElementById("mgdl").onclick=function(){if(!art)return;var b=new Blob([SigArt.mockupSVG(g.cat,art,g.seed)],{type:"image/svg+xml"});SigArt.download(URL.createObjectURL(b),g.id+".svg");};
+    document.getElementById("mgpng").onclick=function(){if(!art)return;SigArt.svgToPng(SigArt.mockupSVG(g.cat,art,g.seed),600,600).then(function(bl){SigArt.download(URL.createObjectURL(bl),g.id+".png");},function(){var d=document.createElement("p");d.textContent="PNG export failed in this browser — the SVG download above works everywhere.";document.getElementById("mbody").appendChild(d);});};
+    document.getElementById("mgcp").onclick=function(){var t=g.id+" — "+g.name+" ("+g.cat+")\n"+g.desc+(art?"\nArt seed: "+art.seedHex:"");(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){alert("Copied!");},function(){prompt("Copy:",t);});};
     document.getElementById("mgrd").onclick=function(){rdSpeak(g.name+". "+g.desc);};
   });
 }};
+/* FIX-01: inject a per-good MediaObject JSON-LD block while its view is open */
+function goodsJSONLD(g){
+  var old=document.getElementById("goodsjsonld");if(old)old.parentNode.removeChild(old);
+  var s=document.createElement("script");s.type="application/ld+json";s.id="goodsjsonld";
+  var j=JSON.stringify({"@context":"https://schema.org","@type":"MediaObject",
+    "@id":"https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?goods="+g.id,
+    "identifier":g.id,"name":g.name,"description":g.desc,"category":g.cat,
+    "creator":{"@type":"Person","name":"Justin Addam Higgins"}}).replace(/<\//g,"<\\/");
+  s.textContent=j;document.head.appendChild(s);
+}
 function modalShow(){document.getElementById("modal").classList.add("on");document.body.style.overflow="hidden";}
-function modalHide(){if(typeof ADRAF!=="undefined"&&ADRAF){cancelAnimationFrame(ADRAF);ADRAF=null;}document.getElementById("modal").classList.remove("on");document.body.style.overflow="";}
+function modalHide(){if(typeof ADRAF!=="undefined"&&ADRAF){cancelAnimationFrame(ADRAF);ADRAF=null;}var old=document.getElementById("goodsjsonld");if(old)old.parentNode.removeChild(old);document.getElementById("modal").classList.remove("on");document.body.style.overflow="";}
 document.getElementById("mx").onclick=function(){modalHide();};
 document.getElementById("modal").addEventListener("click",function(e){if(e.target===this){modalHide();}});
 
@@ -504,6 +543,7 @@ init:function(){
 },
 apply:function(){
   var q=this.q;
+  if(!DB.aIdx){document.getElementById("agrid").innerHTML="<p>Couldn't load the ads index — this browser may not support gzip streaming (DecompressionStream). Try Chrome or Edge.</p>";document.getElementById("amore").style.display="none";return;}
   this.list=DB.aIdx.filter(function(r){return !q||(r[1]+" "+r[2]).toLowerCase().indexOf(q)>=0;});
   this.shown=0;document.getElementById("agrid").innerHTML="";
   this.renderMore();
@@ -547,9 +587,9 @@ open:function(id){
     var cv=document.getElementById("adcanvas"),ctx=cv.getContext("2d"),t0=performance.now();
     if(ADRAF)cancelAnimationFrame(ADRAF);
     (function loop(){var t=((performance.now()-t0)/1000)%plan.seconds;SigArt.drawVideoFrame(ctx,plan,t);ADRAF=requestAnimationFrame(loop);})();
-    document.getElementById("madpng").onclick=function(){SigArt.svgToPng(svg,1200,800).then(function(b){SigArt.download(URL.createObjectURL(b),a.id+".png");});};
+    document.getElementById("madpng").onclick=function(){SigArt.svgToPng(svg,1200,800).then(function(b){SigArt.download(URL.createObjectURL(b),a.id+".png");},function(){var d=document.createElement("p");d.textContent="PNG export failed in this browser — the SVG download works everywhere.";document.getElementById("mbody").appendChild(d);});};
     document.getElementById("madsvg").onclick=function(){var b=new Blob([svg],{type:"image/svg+xml"});SigArt.download(URL.createObjectURL(b),a.id+".svg");};
-    document.getElementById("madwebm").onclick=function(){if(ADRAF)cancelAnimationFrame(ADRAF);ADRAF=null;SigArt.exportWebm(cv,plan,function(b,e){if(e||!b){alert(e||"Export failed.");return;}SigArt.download(URL.createObjectURL(b),a.id+".webm");});};
+    document.getElementById("madwebm").onclick=function(){if(ADRAF)cancelAnimationFrame(ADRAF);ADRAF=null;SigArt.exportWebm(cv,plan,function(b,e){if(e||!b){var d=document.createElement("p");d.textContent="Video export isn't available in this browser — the live preview above still plays fine. Chrome or Edge on desktop is recommended for .webm export.";document.getElementById("mbody").appendChild(d);return;}SigArt.download(URL.createObjectURL(b),a.id+".webm");});};
     document.getElementById("madrd").onclick=function(){rdSpeak("Advertisement "+a.id+". "+a.headline+". "+a.product.name+". "+a.tagline);};
   });
 }};
