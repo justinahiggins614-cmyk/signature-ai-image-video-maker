@@ -92,6 +92,8 @@ def make_ad(idx, prod):
         "seed": int(hashlib.sha256(f"ad:{idx}:{pid}".encode()).hexdigest()[:8], 16),
         "video_caption": f"{name} — {r.choice(TAGLINES)}",
         "video_seconds": r.choice([3, 6, 6, 10]),
+        "commerce_status": "NOT FOR SALE — creative record only",
+        "ad_note": "An auto-made creative. It does not mean the product is manufactured, stocked, or for sale.",
     }
 
 def state():

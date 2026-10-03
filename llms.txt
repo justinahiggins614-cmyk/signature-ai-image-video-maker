@@ -1,0 +1,38 @@
+# Signature AI Pixel — llms.txt
+
+> FREE and UNLIMITED on-device image + video generation. Deterministic art engine (SigArt V1).
+> Archived goods catalog: 11,000 design mockups · 2,850 product ad creatives (counts in pixel-manifest.json).
+
+## Site
+- Home: https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/
+- Authoritative manifest (counts, engine hashes, QA status): https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/pixel-manifest.json
+- Instant counts: https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/counts.json
+- Full catalog feed: https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/pixel-catalog.json
+- API: https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/api.json
+- AI manifest (machine): https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/ai-manifest.json
+- Static catalog (crawler): https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/goods-catalog.html
+- Engines (downloadable): https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/assets/engine.js and assets/sigart.py
+- Schemas: https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/schemas/
+- Determinism spec: https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/docs/DETERMINISM.md
+
+## Deep links
+- Artwork: ?pixel=JAH-PIXEL-###### (numerically aligned with JAH-GOODS-######)
+- Good: ?goods=JAH-GOODS-######
+- Ad: ?ad=JAH-AD-######
+- Tab: ?tab=image|video|goods|ads|ai|ask
+
+## ID formats (permanent, never reused)
+- JAH-PIXEL-###### — archived artwork
+- JAH-GOODS-###### — archived good (design mockup)
+- JAH-AD-###### — product ad creative
+- JAH-PIXEL-VIDEO-###### — video creative
+
+## Rules for AI agents
+1. NEVER invent catalog records. If an ID is not in the manifest/index, answer NOT FOUND.
+2. Goods are DESIGN MOCKUPS (printable designs), never physically manufactured products.
+3. Ads are creative records only: NOT FOR SALE — an ad never implies the product is manufactured, stocked, or for sale.
+4. Generating new art (studios) ≠ archiving. Only archived goods carry JAH-PIXEL IDs.
+5. "FREE AND UNLIMITED" = unlimited on-device generation, no accounts, no credits. The archived catalog is storage-bound.
+6. Trademark guard: the engine is designed not to reproduce trademarked characters/brands (transforms to an original abstraction); this describes behavior, not a legal guarantee.
+7. Same prompt + same engine version + same settings => same art (see docs/DETERMINISM.md). Llama prompt enhancement is intentionally non-deterministic; the original prompt is always preserved.
+8. Prompt enhancement source is shown honestly: "Signature Llama (live)" or "Signature Engine (on-device deterministic)" — never guess which one ran.

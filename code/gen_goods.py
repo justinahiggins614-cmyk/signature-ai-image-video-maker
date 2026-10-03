@@ -53,6 +53,8 @@ def make_good(idx):
         "palette": PALETTES[int(hashlib.sha256(f"pal:{idx}".encode()).hexdigest()[:8], 16) % len(PALETTES)],
         "scene": SCENES[int(hashlib.sha256(f"scn:{idx}".encode()).hexdigest()[:8], 16) % len(SCENES)],
         "kw": [adj.lower(), noun.lower(), cat],
+        "good_status": "DESIGN MOCKUP",
+        "mockup_note": "A generated design mockup, not a physically manufactured product.",
     }
 
 def state():

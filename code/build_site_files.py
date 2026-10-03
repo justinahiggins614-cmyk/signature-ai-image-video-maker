@@ -93,6 +93,7 @@ def write_goods_catalog_html(goods):
              'th{background:#1a1038}td.id{white-space:nowrap;color:#b9a8e0}</style></head><body>',
              '<h1>Signature AI Pixel — Goods Catalog (static index)</h1>',
              f'<p>{len(goods)} goods · static index for crawlers and non-JS readers. '
+             f'Every item is a <b>DESIGN MOCKUP</b> — a generated printable design, not a physically manufactured product. '
              f'Interactive catalog: <a href="{SITE}?tab=goods">Goods Catalog</a> · '
              f'Machine feed: <a href="{SITE}data/pixel-catalog.json">pixel-catalog.json</a></p>']
     for c in sorted(cats):
@@ -101,7 +102,7 @@ def write_goods_catalog_html(goods):
         parts.append('<table><tr><th>ID</th><th>Name</th><th>Description</th><th>Status</th></tr>')
         for (i, n, d) in rows:
             parts.append(f'<tr><td class="id"><a href="{SITE}?goods={esc_h(i)}">{esc_h(i)}</a></td>'
-                         f'<td>{esc_h(n)}</td><td>{esc_h(d)}</td><td>GENERATED</td></tr>')
+                         f'<td>{esc_h(n)}</td><td>{esc_h(d)}</td><td>DESIGN MOCKUP</td></tr>')
         parts.append('</table>')
     parts.append('</body></html>')
     p = os.path.join(BASE, "goods-catalog.html")

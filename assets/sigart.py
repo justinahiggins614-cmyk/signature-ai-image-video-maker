@@ -39,7 +39,8 @@ TM_BLOCK = ["mickey","disney","marvel","spider-man","spiderman","batman","superm
     "mcdonald","star wars","darth vader","jedi","harry potter","hogwarts","minion","shrek","toy story",
     "frozen","elsa","barbie","lego","transformer","x-men","wolverine","avenger","iron man","thor","hulk",
     "deadpool","jurassic","godzilla","king kong","tetris","minecraft","fortnite","playstation","xbox",
-    "iphone","samsung","tesla","ferrari","porsche","gucci","louis vuitton","supreme","starbucks","kfc"]
+    "iphone","samsung","tesla","ferrari","porsche","gucci","louis vuitton","supreme","starbucks","kfc",
+    "donald duck","goofy","snoopy","garfield","smurf","peppa","paw patrol","bluey"]
 
 def xfnv1a(s):
     h = 2166136261

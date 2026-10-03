@@ -485,6 +485,8 @@ document.getElementById("imggo").onclick=function(){
 };
 document.getElementById("imgdlsvg").onclick=function(){
   if(!IMG.art)return;
+  var v=SigArt.validateSVG(IMG.art.svg);
+  if(!v.ok){document.getElementById("imgprov").innerHTML="<p>SVG failed validation ("+esc(v.issues.join(", "))+") — download blocked.</p>";return;}
   var b=new Blob([IMG.art.svg],{type:"image/svg+xml"});
   SigArt.download(URL.createObjectURL(b),"sigart-"+IMG.art.seedHex+".svg");
 };
@@ -652,7 +654,7 @@ open:function(id){
     modalShow();
     document.getElementById("mgopen").onclick=function(){window.open("?goods="+encodeURIComponent(g.id),"_blank","noopener");};
     document.getElementById("mgshare").onclick=function(){pxShare("?goods="+encodeURIComponent(g.id),g.id+" — "+g.name);};
-    document.getElementById("mgdl").onclick=function(){if(!art)return;var b=new Blob([SigArt.mockupSVG(g.cat,art,g.seed)],{type:"image/svg+xml"});SigArt.download(URL.createObjectURL(b),g.id+".svg");};
+    document.getElementById("mgdl").onclick=function(){if(!art)return;var ms=SigArt.mockupSVG(g.cat,art,g.seed);var v=SigArt.validateSVG(ms);if(!v.ok){var d=document.createElement("p");d.textContent="SVG failed validation — download blocked.";document.getElementById("mbody").appendChild(d);return;}var b=new Blob([ms],{type:"image/svg+xml"});SigArt.download(URL.createObjectURL(b),g.id+".svg");};
     document.getElementById("mgpng").onclick=function(){if(!art)return;SigArt.svgToPng(SigArt.mockupSVG(g.cat,art,g.seed),600,600).then(function(bl){SigArt.download(URL.createObjectURL(bl),g.id+".png");},function(){var d=document.createElement("p");d.textContent="PNG export failed in this browser — the SVG download above works everywhere.";document.getElementById("mbody").appendChild(d);});};
     document.getElementById("mgcp").onclick=function(){var t=g.id+" — "+g.name+" ("+g.cat+")\n"+g.desc+(art?"\nArt seed: "+art.seedHex:"");(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){alert("Copied!");},function(){prompt("Copy:",t);});};
     document.getElementById("mgrd").onclick=function(){rdSpeak(g.name+". "+g.desc);};
@@ -748,7 +750,7 @@ open:function(id){
     if(ADRAF)cancelAnimationFrame(ADRAF);
     (function loop(){var t=((performance.now()-t0)/1000)%plan.seconds;SigArt.drawVideoFrame(ctx,plan,t);ADRAF=requestAnimationFrame(loop);})();
     document.getElementById("madpng").onclick=function(){SigArt.svgToPng(svg,1200,800).then(function(b){SigArt.download(URL.createObjectURL(b),a.id+".png");},function(){var d=document.createElement("p");d.textContent="PNG export failed in this browser — the SVG download works everywhere.";document.getElementById("mbody").appendChild(d);});};
-    document.getElementById("madsvg").onclick=function(){var b=new Blob([svg],{type:"image/svg+xml"});SigArt.download(URL.createObjectURL(b),a.id+".svg");};
+    document.getElementById("madsvg").onclick=function(){var v=SigArt.validateSVG(svg);if(!v.ok){var d=document.createElement("p");d.textContent="SVG failed validation — download blocked.";document.getElementById("mbody").appendChild(d);return;}var b=new Blob([svg],{type:"image/svg+xml"});SigArt.download(URL.createObjectURL(b),a.id+".svg");};
     document.getElementById("madwebm").onclick=function(){if(ADRAF)cancelAnimationFrame(ADRAF);ADRAF=null;SigArt.exportWebm(cv,plan,function(b,e){if(e||!b){var d=document.createElement("p");d.textContent="Video export isn't available in this browser — the live preview above still plays fine. Chrome or Edge on desktop is recommended for .webm export.";document.getElementById("mbody").appendChild(d);return;}SigArt.download(URL.createObjectURL(b),a.id+".webm");});};
     document.getElementById("madrd").onclick=function(){rdSpeak("Advertisement "+a.id+". "+a.headline+". "+a.product.name+". "+a.tagline);};
   });

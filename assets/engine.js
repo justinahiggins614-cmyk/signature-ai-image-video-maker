@@ -98,6 +98,20 @@ var SigArt = (function () {
 
   /* ---------------- helpers for SVG ---------------- */
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  /* validateSVG: gate before any SVG download. Engine output is sanitized by
+     construction (no scripts, no external refs, user text escaped); this checks it. */
+  function validateSVG(svg) {
+    var issues = [];
+    if (typeof svg !== "string" || svg.indexOf("<svg") < 0) issues.push("not-svg");
+    var lower = String(svg).toLowerCase();
+    ["<script", "</script", "javascript:", "<foreignobject", "onload=", "onerror=",
+     "onclick=", "onmouseover=", "<iframe", "<embed", "<object"].forEach(function (bad) {
+      if (lower.indexOf(bad) >= 0) issues.push("blocked:" + bad);
+    });
+    var ext = /xlink:href\s*=\s*["']https?:|href\s*=\s*["']https?:/i.exec(svg);
+    if (ext) issues.push("external-resource");
+    return { ok: issues.length === 0, issues: issues };
+  }
   function grad(id, c1, c2, x2) {
     return '<linearGradient id="' + id + '" x1="0" y1="0" x2="' + (x2 ? "1" : "0") + '" y2="1">' +
       '<stop offset="0" stop-color="' + c1 + '"/><stop offset="1" stop-color="' + c2 + '"/></linearGradient>';
@@ -496,7 +510,10 @@ var SigArt = (function () {
           var c = document.createElement("canvas"); c.width = w || 1200; c.height = h || 800;
           var x = c.getContext("2d"); x.drawImage(img, 0, 0, c.width, c.height);
           URL.revokeObjectURL(url);
-          c.toBlob(function (b) { b ? resolve(b) : reject(new Error("toBlob failed")); }, "image/png");
+          c.toBlob(function (b) {
+            if (!b || b.size < 100 || b.type !== "image/png") { reject(new Error("PNG validation failed (empty or wrong type)")); return; }
+            resolve(b);
+          }, "image/png");
         } catch (e) { URL.revokeObjectURL(url); reject(e); }
       };
       img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("SVG raster failed")); };
@@ -515,7 +532,11 @@ var SigArt = (function () {
       var rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
       var chunks = [];
       rec.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
-      rec.onstop = function () { onDone(new Blob(chunks, { type: "video/webm" }), null); };
+      rec.onstop = function () {
+        var blob = new Blob(chunks, { type: "video/webm" });
+        if (!chunks.length || blob.size < 100) { onDone(null, "Video export produced an empty file — the live preview above still plays fine."); return; }
+        onDone(blob, null);
+      };
       rec.start(250);
       var t0 = performance.now(), dur = plan.seconds * 1000;
       var ctx = canvas.getContext("2d");
@@ -600,7 +621,7 @@ var SigArt = (function () {
     s += '<text x="' + (W / 2) + '" y="' + (H * 0.44 + 64) + '" text-anchor="middle" font-family="Verdana" font-size="34" fill="' + pal.fg + '" opacity="0.85">' + esc(ad.tagline) + "</text>";
     s += '<rect x="' + (W / 2 - 260) + '" y="' + (H - 190) + '" width="520" height="92" rx="46" fill="' + pal.accent + '"/>';
     s += '<text x="' + (W / 2) + '" y="' + (H - 130) + '" text-anchor="middle" font-family="Verdana" font-weight="bold" font-size="40" fill="' + pal.deep + '">GET IT AT THE SIGNATURE MEGA-MALL</text>';
-    s += '<text x="' + (W - 24) + '" y="' + (H - 22) + '" text-anchor="end" font-family="monospace" font-size="20" fill="' + pal.fg + '" opacity="0.6">SIG-AD · ' + ad.hex8(seed) + "</text>";
+    s += '<text x="' + (W - 24) + '" y="' + (H - 22) + '" text-anchor="end" font-family="monospace" font-size="20" fill="' + pal.fg + '" opacity="0.6">SIG-AD · ' + hex8(ad.seed) + "</text>";
     return '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + " " + H + '">' + s + "</svg>";
   }
 
@@ -609,7 +630,8 @@ var SigArt = (function () {
     classify: classify, guard: guard, expandPrompt: expandPrompt,
     composeImage: composeImage, planVideo: planVideo, drawVideoFrame: drawVideoFrame,
     svgToPng: svgToPng, exportWebm: exportWebm, download: download,
-    mockupSVG: mockupSVG, adCreative: adCreative, AD_HEADLINES: AD_HEADLINES, esc: esc
+    mockupSVG: mockupSVG, adCreative: adCreative, AD_HEADLINES: AD_HEADLINES, esc: esc,
+    validateSVG: validateSVG
   };
 })();
 if (typeof module !== "undefined" && module.exports) module.exports = SigArt;
