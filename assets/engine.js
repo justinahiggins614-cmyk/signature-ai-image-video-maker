@@ -16,6 +16,7 @@ var SigArt = (function () {
     }
     return h >>> 0;
   }
+  function hex8(n){var s=(n>>>0).toString(16).toUpperCase();while(s.length<8)s="0"+s;return s;}
   function mulberry32(seed) {
     var a = seed >>> 0;
     return function () {
@@ -340,10 +341,10 @@ var SigArt = (function () {
       s += '<text x="' + (W / 2) + '" y="' + (H - 86) + '" text-anchor="middle" font-family="Verdana,sans-serif" font-weight="bold" font-size="52" fill="' + pal.accent + '" stroke="' + pal.deep + '" stroke-width="1">' + esc(cap.slice(0, 42)) + '</text>';
     }
     /* signature mark */
-    s += '<text x="' + (W - 24) + '" y="' + (H - 22) + '" text-anchor="end" font-family="monospace" font-size="20" fill="' + pal.fg + '" opacity="0.6">SIG-ART · ' + seed.toString(16).toUpperCase() + '</text>';
+    s += '<text x="' + (W - 24) + '" y="' + (H - 22) + '" text-anchor="end" font-family="monospace" font-size="20" fill="' + pal.fg + '" opacity="0.6">SIG-ART · ' + hex8(seed) + '</text>';
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">' + s + "</svg>";
     return {
-      svg: svg, seed: seed, seedHex: seed.toString(16).toUpperCase(),
+      svg: svg, seed: seed, seedHex: hex8(seed),
       palette: pal.name, scene: scene, prompt: prompt,
       guarded: !g.clean, guardNote: g.note || "",
       description: "A " + pal.name.toLowerCase() + " " + scene + " scene — " + prompt.trim().slice(0, 120)
@@ -361,7 +362,7 @@ var SigArt = (function () {
     var scene = classify(g.cleanPrompt);
     if (scene === "creature" || scene === "object") scene = "landscape";
     return {
-      seed: seed, seedHex: seed.toString(16).toUpperCase(), palette: pal.name,
+      seed: seed, seedHex: hex8(seed), palette: pal.name,
       scene: scene, prompt: prompt, seconds: opts.seconds || 6, fps: 15,
       drift: range(r, 0.4, 1.4), pulse: range(r, 0.5, 1.5),
       px: range(r, 0, 1200), py: range(r, 100, 500),
@@ -599,7 +600,7 @@ var SigArt = (function () {
     s += '<text x="' + (W / 2) + '" y="' + (H * 0.44 + 64) + '" text-anchor="middle" font-family="Verdana" font-size="34" fill="' + pal.fg + '" opacity="0.85">' + esc(ad.tagline) + "</text>";
     s += '<rect x="' + (W / 2 - 260) + '" y="' + (H - 190) + '" width="520" height="92" rx="46" fill="' + pal.accent + '"/>';
     s += '<text x="' + (W / 2) + '" y="' + (H - 130) + '" text-anchor="middle" font-family="Verdana" font-weight="bold" font-size="40" fill="' + pal.deep + '">GET IT AT THE SIGNATURE MEGA-MALL</text>';
-    s += '<text x="' + (W - 24) + '" y="' + (H - 22) + '" text-anchor="end" font-family="monospace" font-size="20" fill="' + pal.fg + '" opacity="0.6">SIG-AD · ' + ad.seed.toString(16).toUpperCase() + "</text>";
+    s += '<text x="' + (W - 24) + '" y="' + (H - 22) + '" text-anchor="end" font-family="monospace" font-size="20" fill="' + pal.fg + '" opacity="0.6">SIG-AD · ' + ad.hex8(seed) + "</text>";
     return '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + " " + H + '">' + s + "</svg>";
   }
 
