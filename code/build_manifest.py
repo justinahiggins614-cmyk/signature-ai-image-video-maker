@@ -56,6 +56,25 @@ def read_idx(name):
 def num_of(prefix, id_):
     return int(id_.replace(prefix, ""))
 
+def stamp_homepage_counts(goods_total, ads_total):
+    """Re-stamp the homepage count chips with real counts (idempotent)."""
+    import re
+    p = os.path.join(BASE, "index.html")
+    t = open(p, encoding="utf-8").read()
+    gf = f"{goods_total:,}"
+    af = f"{ads_total:,}"
+    t2, n1 = re.subn(r'<b id="cGoods">[^<]*</b>', f'<b id="cGoods">{gf}</b>', t)
+    t2, n2 = re.subn(r'<b id="cAds">[^<]*</b>', f'<b id="cAds">{af}</b>', t2)
+    if n1 != 1 or n2 != 1:
+        print(f"COUNT-STAMP FAILED: cGoods replacements={n1}, cAds replacements={n2} (expected 1 each)",
+              file=sys.stderr)
+        sys.exit(1)
+    if t2 != t:
+        open(p, "w", encoding="utf-8").write(t2)
+        print(f"stamped homepage chips: {gf} goods / {af} ads")
+    else:
+        print(f"homepage chips already stamped: {gf} goods / {af} ads")
+
 def main():
     fails = []
     def gate(name, ok, detail=""):
@@ -199,6 +218,10 @@ def main():
     }
     with open(os.path.join(BASE, "data", "counts.json"), "w") as f:
         json.dump(counts, f, indent=1)
+    # G6 universal loading pattern: stamp the last-known real counts into the raw
+    # HTML chips (never bare "…" on first paint); the drip re-stamps every run,
+    # and the page JS overwrites these live once data/counts.json loads.
+    stamp_homepage_counts(len(goods), len(ads))
     api = {
         "site": "Signature AI Pixel",
         "site_url": SITE,

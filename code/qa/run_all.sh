@@ -57,6 +57,10 @@ print("PASS manifest keys + counts")
 raise SystemExit(0 if ok else 1)
 EOF
 
+echo "=== [6/6] functional exercise (engine + page harnesses) ==="
+node code/qa/functional_harness.js || fails=$((fails+1))
+node code/qa/page_harness.js || fails=$((fails+1))
+
 echo ""
 if [ $fails -eq 0 ]; then echo "QA: ALL PASS"; else echo "QA: $fails FAILURES"; fi
 exit $fails
