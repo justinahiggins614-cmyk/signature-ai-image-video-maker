@@ -69,7 +69,7 @@ def write_catalog_feed(goods, ads):
                    "url": SITE + "?goods=" + i} for (i, n, c, d) in goods],
         "ads_total": len(ads),
         "ads": [{"id": a, "url": SITE + "?ad=" + a} for a in ads],
-        "network": "THE JAH NETWORK — 25 sites",
+        "network": "THE JAH NETWORK — 27 sites",
     }
     p = os.path.join(BASE, "data", "pixel-catalog.json")
     with open(p, "w") as f:
@@ -148,7 +148,7 @@ def main():
         "engine": {"js": SITE + "assets/engine.js", "py": SITE + "assets/sigart.py",
                    "deterministic": True, "offline_capable": True},
         "deep_links": {"goods": SITE + "?goods=JAH-GOODS-000001", "ad": SITE + "?ad=JAH-AD-000001"},
-        "network": "THE JAH NETWORK — 25 sites",
+        "network": "THE JAH NETWORK — 27 sites",
     }
     json.dump(api, open(os.path.join(BASE, "api.json"), "w"), indent=1)
     print(f"sitemap: {len(pages)} pages + {len(goods)} goods + {len(ads)} ads | api.json written")
