@@ -202,6 +202,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <button class="btn" id="vidgo">✨ GENERATE VIDEO</button>
 <button class="btn ghost" id="vidrand">🎲 Surprise me</button>
 </div>
+<p class="warnline">⚠️ <b>Before you generate:</b> this needs HTML5 canvas + MediaRecorder on your device, and <b>.webm export needs Chrome/Edge on desktop</b> — other browsers may not support export. The live preview plays in any modern browser.</p>
 <div class="preview"><canvas id="vidcanvas" width="1280" height="720" style="display:none"></canvas></div>
 <div class="row" id="vidtools" style="display:none">
 <button class="btn gold" id="viddl">⬇ Download .webm</button>
@@ -218,6 +219,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <div class="card">
 <h2>🛍️ Goods Catalog — a million potential goods</h2>
 <p class="sub">Every way an image can live in the world: posters, stickers, shirts, surfboards and more. Each good carries original Signature art as a printable design mockup — free to download.</p>
+<p class="warnline">⚠️ <b>Design mockups, not physical products.</b> Every good is a printable art file you download free — nothing here is manufactured, shipped, or for sale.</p>
 <div class="gstick">
 <div class="toolbar">
 <input type="text" id="gq" placeholder="Search goods…" aria-label="Search goods">
@@ -237,6 +239,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <div class="card">
 <h2>📢 Product Ads — auto-made for every Signature product</h2>
 <p class="sub">The engine watches the catalogs and makes an image ad and a video ad for each product — stored here as made. Image creative downloads as PNG/SVG; video ads preview live on your device.</p>
+<p class="warnline">⚠️ <b>Generated ad creatives, not live commercial listings.</b> The engine auto-makes mock ads for Signature products — nothing is for sale and no purchase is possible here.</p>
 <div class="toolbar">
 <input type="text" id="aq" placeholder="Search ads by product…" aria-label="Search ads">
 <button class="btn" id="ago">Search</button>
@@ -462,8 +465,14 @@ document.getElementById("vidgo").onclick=function(){
     VID.raf=requestAnimationFrame(loop);
   })();
   document.getElementById("vidtools").style.display="flex";
-  var prov="<p><span class='spin'></span> Playing — "+plan.seconds+"s deterministic loop. Same prompt always makes the same video.</p>Seed <b>"+plan.seedHex+"</b> · palette <b>"+esc(plan.palette)+"</b> · "+plan.seconds+"s @ 15fps · deterministic";
-  if(plan.guarded)prov+='<br>🛡️ '+esc(plan.guardNote);
+  /* FIX: video result panel — duration, resolution, export format, browser compatibility */
+  var prov="<p><span class='spin'></span> Playing — "+plan.seconds+"s deterministic loop. Same prompt always makes the same video.</p>"+
+    '<div class="resline"><b>Duration:</b> '+plan.seconds+'s @ 15fps</div>'+
+    '<div class="resline"><b>Resolution:</b> 1280×720</div>'+
+    '<div class="resline"><b>Export format:</b> .webm — needs Chrome/Edge on desktop</div>'+
+    '<div class="resline"><b>Plays in:</b> any browser with HTML5 canvas</div>'+
+    '<div class="resline"><b>Seed:</b> '+plan.seedHex+' · palette <b>'+esc(plan.palette)+'</b></div>';
+  if(plan.guarded)prov+='<div class="resline">🛡️ '+esc(plan.guardNote)+'</div>';
   document.getElementById("vidprov").innerHTML=prov;
 };
 document.getElementById("viddl").onclick=function(){
@@ -556,6 +565,7 @@ open:function(id){
       "<h2>"+esc(g.name)+"</h2><p style='color:#b9a8e0'>"+g.id+" · "+esc(g.cat)+"</p>"+
       (art?SigArt.mockupSVG(g.cat,art,g.seed):"<p>Preview unavailable for this good.</p>")+
       "<p>"+esc(g.desc)+"</p>"+
+      '<p class="warnline">⚠️ Design mockup — not a physical product. Download the design file; no item ships.</p>'+
       (art?"<p style='font-size:12px;color:#b9a8e0'>Art seed "+art.seedHex+" · "+esc(art.palette)+" · deterministic — the downloadable engine renders this exact design.</p>":"")+
       '<div class="row"><button class="btn gold" id="mgdl">⬇ Download design SVG</button>'+
       '<button class="btn ghost" id="mgpng">⬇ PNG</button>'+
@@ -629,6 +639,7 @@ open:function(id){
     document.getElementById("mbody").innerHTML=
       "<h2>Ad "+a.id+"</h2><p style='color:#b9a8e0'>Advertises: <b>"+esc(a.product.name)+"</b> ("+esc(a.product.site)+" · "+esc(a.product.pid)+")</p>"+
       svg+
+      '<p class="warnline">⚠️ Generated creative — a mock ad made by the engine, not an actual commercial listing. Nothing is for sale.</p>'+
       "<h3>Video ad ("+a.video_seconds+"s)</h3><canvas id='adcanvas' width='1280' height='720' style='width:100%;border-radius:12px'></canvas>"+
       '<div class="row"><button class="btn gold" id="madpng">⬇ Image ad PNG</button>'+
       '<button class="btn ghost" id="madsvg">⬇ Image ad SVG</button>'+
