@@ -169,9 +169,9 @@ function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   await sleep(400); /* let DB.load() + manifest fetch settle */
   for (var w = 0; w < 40 && !(typeof DB !== "undefined" && DB.gIdx); w++) await sleep(250);
 
-  /* ---------- kicker (triage C: must read SITE 22 OF 27) ---------- */
-  check("kicker reads from manifest", $("kick").textContent.indexOf("SITE 22 OF 27") === 0, $("kick").textContent);
-  check("kicker full format", $("kick").textContent === "SITE 22 OF 27 · THE JAH NETWORK", $("kick").textContent);
+  /* ---------- kicker (triage C: must read SITE 22 OF 31) ---------- */
+  check("kicker reads from manifest", $("kick").textContent.indexOf("SITE 22 OF 31") === 0, $("kick").textContent);
+  check("kicker full format", $("kick").textContent === "SITE 22 OF 31 · THE JAH NETWORK", $("kick").textContent);
 
   /* ---------- counters: never bare "…" after load ---------- */
   check("goods counter shows real count", $("cGoods").textContent === "15,000", $("cGoods").textContent);
