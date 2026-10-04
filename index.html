@@ -1079,7 +1079,7 @@ addEventListener("load",function(){setTimeout(function(){
   document.getElementById("pxtouroverbtn").onclick=closeTour;
   document.getElementById("pxtourhelp").onclick=function(){closeTour();pxGuideOpen();};
   over.addEventListener("click",function(e){if(e.target===over)closeTour();});
-  function pxGuideOpen(){document.getElementById("pxguide").classList.add("on");try{document.getElementById("pxguidex").focus();}catch(e){}}
+  function pxGuideOpen(){document.getElementById("pxguide").classList.add("on");try{document.getElementById("pxguidex").focus({preventScroll:true});}catch(e){}}
   function pxGuideClose(){document.getElementById("pxguide").classList.remove("on");}
   /* ? button re-opens the welcome tour */
   document.getElementById("pxguidebtn").onclick=function(){openTour();};
