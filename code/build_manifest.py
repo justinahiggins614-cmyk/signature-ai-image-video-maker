@@ -190,7 +190,7 @@ def main():
             "commerce": "product ads are creative records; an ad does not mean a product is manufactured, stocked, or for sale",
             "trademark": "engine is designed not to reproduce trademarked characters/logos/brands (abstraction, not a legal guarantee)",
         },
-        "qa": {"gates": "G1..G5", "status": "PASS" if not fails else "FAIL",
+        "qa": {"gates": "G1..G6", "status": "PASS" if not fails else "FAIL",
                "failed": fails},
     }
 
@@ -201,6 +201,28 @@ def main():
          st.get("goods_total") == len(goods), f"state {st.get('goods_total')} vs {len(goods)}")
     gate("G4 ads_state.json agrees with chunk scan",
          ast.get("ads_total") == len(ads), f"state {ast.get('ads_total')} vs {len(ads)}")
+
+    # G6: goods-catalog.html stamped counts + lazy category files agree with state
+    html_p = os.path.join(BASE, "goods-catalog.html")
+    gc_d = os.path.join(BASE, "data", "goods-cat")
+    _html = open(html_p, encoding="utf-8").read() if os.path.exists(html_p) else ""
+    import re as _re
+    _mg = _re.search(r'id="statline"[^>]*data-goods="(\d+)"[^>]*data-ads="(\d+)"', _html)
+    _ma = _re.search(r'id="statline"[^>]*data-ads="(\d+)"', _html)
+    gate("G6 goods-catalog.html stamped goods count == state.json goods_total",
+         bool(_mg) and int(_mg.group(1)) == st.get("goods_total", -1),
+         f"stamped {_mg.group(1) if _mg else 'MISSING'} vs {st.get('goods_total')}")
+    gate("G6 goods-catalog.html stamped ads count == ads_state.json ads_total",
+         bool(_ma) and int(_ma.group(1)) == ast.get("ads_total", -1),
+         f"stamped {_ma.group(1) if _ma else 'MISSING'} vs {ast.get('ads_total')}")
+    _catfiles = [f for f in os.listdir(gc_d) if f.endswith(".json.gz")] if os.path.isdir(gc_d) else []
+    _catslugs = set()
+    for _id, (r, _fn) in goods.items():
+        _c = r.get("cat", "misc")
+        _catslugs.add(_re.sub(r"[^a-z0-9]+", "-", _c.lower()).strip("-") or "misc")
+    gate("G6 goods-cat lazy files == category count",
+         set(f[:-8] for f in _catfiles) == _catslugs,
+         f"{len(_catfiles)} files vs {len(_catslugs)} categories")
 
     if fails:
         print("MANIFEST NOT WRITTEN — gates failed")

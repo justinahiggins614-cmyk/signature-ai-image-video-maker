@@ -259,6 +259,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <div class="card">
 <h2>🛍️ Goods Catalog — a million potential goods</h2>
 <p class="sub">Every way an image can live in the world: posters, stickers, shirts, surfboards and more. Each good carries original Signature art as a printable design mockup — free to download.</p>
+<p class="sub">📚 Browse the <a href="goods-catalog.html"><b>full A–Z goods archive</b></a> — every good, searchable, grouped by category and name.</p>
 <p class="warnline">⚠️ <b>Design mockups, not physical products.</b> Every good is a printable art file you download free — nothing here is manufactured, shipped, or for sale.</p>
 <div class="gstick">
 <div class="toolbar">
@@ -381,7 +382,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <p><b>SIGNATURE AI PIXEL</b> — free and unlimited image &amp; video generation, a million potential goods, and auto-made product ads.</p>
 <p>All artwork is original and generated deterministically on your device. Nothing here reproduces trademarked characters, logos or brands — trademarked names in prompts render as original Signature-style abstractions. The image generator is free and unlimited; the Llama model itself is "currently free for all internet tasks" per the Signature Llama site.</p>
 <p>Part of <b>THE JAH NETWORK</b> · <span id="footcount"></span></p>
-<p>Catalog indexes: <a href="goods-catalog.html">static goods index</a> · <a href="data/pixel-catalog.json">pixel-catalog.json machine feed</a></p>
+<p>Catalog indexes: <a href="goods-catalog.html">full A–Z goods archive</a> · <a href="data/pixel-catalog.json">pixel-catalog.json machine feed</a></p>
 </footer>
 
 <script>
@@ -664,7 +665,7 @@ init:function(){
 },
 apply:function(){
   var f=this.filter;
-  if(!DB.gIdx){document.getElementById("ggrid").innerHTML="<p>Couldn't load the goods catalog — this browser may not support gzip streaming (DecompressionStream). Try Chrome or Edge, or browse the <a href='goods-catalog.html'>static goods index</a>.</p>";document.getElementById("gmore").style.display="none";return;}
+  if(!DB.gIdx){document.getElementById("ggrid").innerHTML="<p>Couldn't load the goods catalog — this browser may not support gzip streaming (DecompressionStream). Try Chrome or Edge, or browse the <a href='goods-catalog.html'>full A–Z goods archive</a>.</p>";document.getElementById("gmore").style.display="none";return;}
   this.list=DB.gIdx.filter(function(r){
     if(f.cat&&r[2]!==f.cat)return false;
     if(f.az&&r[1][0].toUpperCase()!==f.az)return false;
