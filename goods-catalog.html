@@ -55,7 +55,8 @@ function renderCat(det,rows){
     by[L].forEach(function(r){
       html+='<li><a href="'+SITE+'?goods='+encodeURIComponent(r[0])+'"><b>'+esc(r[0])+'</b></a> '
         +'<span class="gname">'+esc(r[1])+'</span>'
-        +'<span class="gdesc">'+esc(r[2])+' — DESIGN MOCKUP</span></li>';
+        +'<span class="gdesc">'+esc(r[2])+' — DESIGN MOCKUP</span>'
+        +' <a href="edit-photo.html?good='+encodeURIComponent(r[0])+'" title="Open in Photo Shop">✏️</a></li>';
     });
     html+='</ul></details>';
   });
@@ -90,7 +91,7 @@ box.addEventListener("input",function(){
       if(r[0].toLowerCase().indexOf(q)>-1||r[1].toLowerCase().indexOf(q)>-1||r[2].toLowerCase().indexOf(q)>-1)hits.push(r);}
     if(!hits.length){res.innerHTML="<p>No goods match \u201c"+esc(q)+"\u201d.</p>";return;}
     var html="<ul>";
-    hits.forEach(function(r){html+='<li><a href="'+SITE+'?goods='+encodeURIComponent(r[0])+'"><b>'+esc(r[0])+'</b></a> <span class="gname">'+esc(r[1])+'</span> <span class="gcat">'+esc(r[2])+'</span></li>';});
+    hits.forEach(function(r){html+='<li><a href="'+SITE+'?goods='+encodeURIComponent(r[0])+'"><b>'+esc(r[0])+'</b></a> <span class="gname">'+esc(r[1])+'</span> <span class="gcat">'+esc(r[2])+'</span> <a href="edit-photo.html?good='+encodeURIComponent(r[0])+'" title="Open in Photo Shop">✏️</a></li>';});
     res.innerHTML=html+"</ul><p>"+hits.length+(hits.length===25?" (top 25)":"")+" match"+(hits.length===1?"":"es")+".</p>";
   });
 });

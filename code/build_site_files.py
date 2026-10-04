@@ -240,6 +240,7 @@ def main():
     ads = ads_ids()
     pages = [SITE, SITE + "?tab=image", SITE + "?tab=video", SITE + "?tab=goods",
              SITE + "?tab=ads", SITE + "?tab=take", SITE + "goods-catalog.html",
+             SITE + "edit-video.html", SITE + "edit-photo.html",
              SITE + "pixel-manifest.json", SITE + "ai-manifest.json", SITE + "llms.txt",
              SITE + "api.json", SITE + "data/counts.json", SITE + "data/pixel-catalog.json",
              SITE + "docs/DETERMINISM.md"]

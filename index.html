@@ -195,6 +195,18 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <p class="hu">⚠️ Generated mock creatives, not live commercial listings. Nothing is for sale here.</p>
 <button class="btn" onclick="goTab('ads')">Browse ads →</button>
 </div>
+<div class="card hcard">
+<h3>🎬 Edit a Video</h3>
+<p>CapCut-style video editor on your device: trim, split, fade with keyframes, add words and music, export .webm.</p>
+<p class="hu">Everything runs in your browser — nothing is uploaded.</p>
+<button class="btn" onclick="location.href='edit-video.html'">Open video editor →</button>
+</div>
+<div class="card hcard">
+<h3>🖼 Photo Shop</h3>
+<p>Photo editor on your device: filters, crop, rotate, words, brush, undo — plus one-tap edit of any good or ad.</p>
+<p class="hu">Everything runs in your browser — nothing is uploaded.</p>
+<button class="btn" onclick="location.href='edit-photo.html'">Open Photo Shop →</button>
+</div>
 </div>
 </div>
 </section>
@@ -724,6 +736,7 @@ open:function(id){
       (art?"<p class='provenance'>⚙️ <b>Provenance:</b> made by the Pixel goods engine · art seed "+art.seedHex+" · "+esc(art.palette)+" · deterministic — the downloadable engine renders this exact design.</p>":"")+
       '<div class="row"><button class="btn gold" id="mgdl">⬇ Download design SVG</button>'+
       '<button class="btn ghost" id="mgpng">⬇ PNG</button>'+
+      '<button class="btn ghost" id="mgedit">✏️ Open in Photo Shop</button>'+
       '<button class="btn ghost" id="mgcp">📋 Copy</button>'+
       '<button class="btn ghost" id="mgrd">🔊 Read</button></div>';
     modalShow();
@@ -731,6 +744,7 @@ open:function(id){
     document.getElementById("mgshare").onclick=function(){pxShare("?goods="+encodeURIComponent(g.id),g.id+" — "+g.name);};
     document.getElementById("mgdl").onclick=function(){if(!art)return;var ms=SigArt.mockupSVG(g.cat,art,g.seed);var v=SigArt.validateSVG(ms);if(!v.ok){var d=document.createElement("p");d.textContent="SVG failed validation — download blocked.";document.getElementById("mbody").appendChild(d);return;}var b=new Blob([ms],{type:"image/svg+xml"});SigArt.download(URL.createObjectURL(b),g.id+".svg");};
     document.getElementById("mgpng").onclick=function(){if(!art)return;SigArt.svgToPng(SigArt.mockupSVG(g.cat,art,g.seed),600,600).then(function(bl){SigArt.download(URL.createObjectURL(bl),g.id+".png");},function(){var d=document.createElement("p");d.textContent="PNG export failed in this browser — the SVG download above works everywhere.";document.getElementById("mbody").appendChild(d);});};
+    document.getElementById("mgedit").onclick=function(){location.href="edit-photo.html?good="+encodeURIComponent(g.id);};
     document.getElementById("mgcp").onclick=function(){var t=g.id+" — "+g.name+" ("+g.cat+")\n"+g.desc+(art?"\nArt seed: "+art.seedHex:"");(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){alert("Copied!");},function(){prompt("Copy:",t);});};
     document.getElementById("mgrd").onclick=function(){rdSpeak(g.name+". "+g.desc);};
   });
@@ -816,6 +830,7 @@ open:function(id){
       "<h3>Video ad ("+a.video_seconds+"s)</h3><canvas id='adcanvas' width='1280' height='720' style='width:100%;border-radius:12px'></canvas>"+
       '<div class="row"><button class="btn gold" id="madpng">⬇ Image ad PNG</button>'+
       '<button class="btn ghost" id="madsvg">⬇ Image ad SVG</button>'+
+      '<button class="btn ghost" id="madedit">✏️ Open in Photo Shop</button>'+
       '<button class="btn ghost" id="madwebm">⬇ Video ad .webm</button>'+
       '<button class="btn ghost" id="madrd">🔊 Read</button></div>';
     modalShow();
@@ -826,6 +841,7 @@ open:function(id){
     (function loop(){var t=((performance.now()-t0)/1000)%plan.seconds;SigArt.drawVideoFrame(ctx,plan,t);ADRAF=requestAnimationFrame(loop);})();
     document.getElementById("madpng").onclick=function(){SigArt.svgToPng(svg,1200,800).then(function(b){SigArt.download(URL.createObjectURL(b),a.id+".png");},function(){var d=document.createElement("p");d.textContent="PNG export failed in this browser — the SVG download works everywhere.";document.getElementById("mbody").appendChild(d);});};
     document.getElementById("madsvg").onclick=function(){var v=SigArt.validateSVG(svg);if(!v.ok){var d=document.createElement("p");d.textContent="SVG failed validation — download blocked.";document.getElementById("mbody").appendChild(d);return;}var b=new Blob([svg],{type:"image/svg+xml"});SigArt.download(URL.createObjectURL(b),a.id+".svg");};
+    document.getElementById("madedit").onclick=function(){location.href="edit-photo.html?ad="+encodeURIComponent(a.id);};
     document.getElementById("madwebm").onclick=function(){if(ADRAF)cancelAnimationFrame(ADRAF);ADRAF=null;SigArt.exportWebm(cv,plan,function(b,e){if(e||!b){var d=document.createElement("p");d.textContent="Video export isn't available in this browser — the live preview above still plays fine. Chrome or Edge on desktop is recommended for .webm export.";document.getElementById("mbody").appendChild(d);return;}SigArt.download(URL.createObjectURL(b),a.id+".webm");});};
     document.getElementById("madrd").onclick=function(){rdSpeak("Advertisement "+a.id+". "+a.headline+". "+a.product.name+". "+a.tagline);};
   });

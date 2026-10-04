@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>try{if(localStorage.getItem("jah-theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Photo Shop — Signature AI Pixel</title>
+<meta name="description" content="Signature AI Pixel Photo Shop: filters, crop, rotate, text, brush, undo — edit any photo on your device.">
+<link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/edit-photo.html">
+<style>
+:root{--bg:#0a0618;--bg2:#140b2e;--card:#1a1038;--line:#3a2568;--txt:#f2ecff;--dim:#b9a8e0;--acc:#00f0ff;--gold:#ffd166;--pink:#ff2fb3}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#241245 0%,var(--bg) 60%);color:var(--txt);font-family:Verdana,system-ui,sans-serif}
+a{color:var(--acc)}
+header.brand{text-align:center;padding:22px 16px 6px}
+header.brand h1{margin:0;font-size:clamp(22px,4vw,36px);letter-spacing:2px;background:linear-gradient(90deg,var(--acc),var(--pink),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--dim);max-width:860px;margin:10px auto 0;font-size:13px;line-height:1.6;text-align:center;padding:0 12px}
+nav.jahnet{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:12px;background:#0d0722;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:12px}
+nav.jahnet a{color:var(--dim);text-decoration:none;padding:5px 9px;border:1px solid var(--line);border-radius:20px}
+nav.jahnet a:hover{color:var(--acc);border-color:var(--acc)}
+nav.jahnet .here{background:linear-gradient(90deg,#ff2f2f,#ff7a2f);color:#fff;border:none;font-weight:bold;padding:5px 12px;border-radius:20px}
+main{max-width:1060px;margin:0 auto;padding:14px 12px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:14px 0}
+.btn{background:var(--acc);color:#062a30;border:none;border-radius:10px;padding:12px 16px;font-weight:bold;cursor:pointer;font-size:14px;margin:4px 6px 4px 0;font-family:inherit;min-height:44px}
+.btn.gold{background:var(--gold);color:#201400}
+.btn.ghost{background:transparent;border:2px solid var(--acc);color:var(--acc)}
+.btn.pink{background:var(--pink);color:#fff}
+.btn.on{outline:3px solid var(--gold)}
+.btn:disabled{opacity:.4;cursor:default}
+.lbl{display:block;color:var(--dim);font-size:13px;margin:10px 0 4px}
+input[type=text]{background:#0d0722;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:15px;font-family:inherit;width:100%}
+input[type=range]{width:100%;min-height:40px}
+input[type=color]{width:56px;height:44px;border:1px solid var(--line);border-radius:8px;background:#0d0722;padding:2px}
+#stagewrap{position:relative;background:#000;border-radius:12px;overflow:hidden;touch-action:none}
+#view{width:100%;display:block;background:#000}
+.txtghost{position:absolute;cursor:move;user-select:none;-webkit-user-select:none;touch-action:none;white-space:nowrap;font-weight:bold;text-shadow:0 2px 6px #000}
+#croprect{position:absolute;border:2px dashed var(--gold);background:#ffd16622;display:none;pointer-events:none}
+.toolbar{display:flex;flex-wrap:wrap;gap:4px;margin:10px 0}
+.panel{display:none;margin-top:10px;padding:12px;background:#0d0722;border:1px solid var(--line);border-radius:12px}
+.panel.on{display:block}
+.prow{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.prow>div{flex:1;min-width:130px}
+#msg{min-height:22px;font-size:13px;color:var(--gold);margin-top:8px}
+details.guide{margin:14px 0}
+details.guide summary{cursor:pointer;color:var(--acc);font-weight:bold;min-height:44px}
+.kv{font-size:12px;color:var(--dim)}
+html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"] canvas{filter:invert(1) hue-rotate(180deg)}
+</style>
+</head>
+<body>
+<header class="brand">
+<h1>🖼 PHOTO SHOP</h1>
+<p class="sub"><b>Signature AI Pixel — photo edit page.</b> Filters, crop, rotate, words, brush — all on your device, nothing uploaded. <a href="index.html">← Back to Signature AI Pixel</a></p>
+</header>
+<nav class="jahnet" aria-label="JAH Network" id="jahnet"></nav>
+<main>
+<div class="card">
+<h2 style="margin-top:0">1 · Open a photo</h2>
+<div class="toolbar">
+<label class="btn gold" style="display:inline-block">📁 Choose photo<input type="file" id="pfile" accept="image/*" capture="environment" style="display:none"></label>
+<button class="btn ghost" id="psample">🎲 Sample picture</button>
+</div>
+<p class="kv" id="pinfo">No photo yet. Tip: open any good or ad with “✏️ Open in Photo Shop” and it lands here.</p>
+</div>
+
+<div class="card" id="editcard" style="display:none">
+<h2 style="margin-top:0">2 · Edit it</h2>
+<div id="stagewrap"><canvas id="view"></canvas><div id="croprect"></div></div>
+<div class="toolbar" role="toolbar" aria-label="Edit tools">
+<button class="btn ghost" data-tool="filters">🎚 Filters</button>
+<button class="btn ghost" data-tool="crop">✂ Crop</button>
+<button class="btn ghost" id="rotl">⟲ Turn left</button>
+<button class="btn ghost" id="rotr">⟳ Turn right</button>
+<button class="btn ghost" id="fliph">⇋ Flip sideways</button>
+<button class="btn ghost" id="flipv">⇅ Flip up-down</button>
+<button class="btn ghost" data-tool="text">🔤 Words</button>
+<button class="btn ghost" data-tool="brush">🖌 Brush</button>
+<button class="btn pink" id="undo">↩ Undo</button>
+</div>
+
+<div class="panel" id="p-filters">
+<div class="prow">
+<div><label class="lbl">Brightness <span id="vb">100%</span></label><input type="range" id="fb" min="0" max="200" value="100"></div>
+<div><label class="lbl">Contrast <span id="vc">100%</span></label><input type="range" id="fc" min="0" max="200" value="100"></div>
+<div><label class="lbl">Color <span id="vs">100%</span></label><input type="range" id="fs" min="0" max="200" value="100"></div>
+</div>
+<div class="toolbar">
+<button class="btn ghost" data-preset="normal">Normal</button>
+<button class="btn ghost" data-preset="bw">B&amp;W</button>
+<button class="btn ghost" data-preset="sepia">Sepia</button>
+<button class="btn ghost" data-preset="vintage">Vintage</button>
+<button class="btn ghost" data-preset="vivid">Vivid</button>
+</div>
+</div>
+
+<div class="panel" id="p-crop">
+<p class="kv">Drag a box on the photo, then:</p>
+<div class="toolbar"><button class="btn gold" id="cropgo">✂ Cut to this box</button><button class="btn ghost" id="cropcancel">Cancel</button></div>
+</div>
+
+<div class="panel" id="p-text">
+<label class="lbl">Words</label><input type="text" id="twords" placeholder="Hello!">
+<div class="prow">
+<div><label class="lbl">Size</label><input type="range" id="tsize" min="16" max="160" value="64"></div>
+<div><label class="lbl">Color</label><input type="color" id="tcolor" value="#ffffff"></div>
+</div>
+<div class="toolbar"><button class="btn" id="tplace">Place — then drag it on the photo</button><button class="btn ghost" id="tstamp">✔ Stamp it down</button><button class="btn ghost" id="tremove">Remove</button></div>
+<p class="kv">Double-tap the words to remove them.</p>
+</div>
+
+<div class="panel" id="p-brush">
+<div class="prow">
+<div><label class="lbl">Brush color</label><input type="color" id="bcolor" value="#ff2fb3"></div>
+<div><label class="lbl">Brush size <span id="vbs">12</span></label><input type="range" id="bsize" min="2" max="80" value="12"></div>
+</div>
+<p class="kv">Paint right on the photo with your finger or mouse.</p>
+</div>
+<div id="msg" role="status"></div>
+</div>
+
+<div class="card" id="dlcard" style="display:none">
+<h2 style="margin-top:0">3 · Keep it</h2>
+<div class="toolbar">
+<button class="btn gold" id="dlpng">⬇ Download PNG</button>
+<button class="btn ghost" id="dljpg">⬇ Download JPG</button>
+</div>
+<p class="kv">Your edited photo saves straight to your device.</p>
+</div>
+
+<details class="guide card"><summary>❓ How to use the Photo Shop</summary>
+<ol style="line-height:1.9;font-size:14px">
+<li><b>Open a photo</b> — yours, the sample, or any good/ad via “✏️ Open in Photo Shop”.</li>
+<li><b>Filters:</b> slide Brightness / Contrast / Color, or tap a look (B&amp;W, Sepia, Vintage, Vivid).</li>
+<li><b>Crop:</b> drag a box, tap “Cut to this box”.</li>
+<li><b>Turn / Flip</b> rotate and mirror the photo.</li>
+<li><b>Words:</b> type, Place, drag them where you want, then “Stamp it down” to bake them in.</li>
+<li><b>Brush:</b> pick a color and size, paint on the photo.</li>
+<li><b>↩ Undo</b> steps back one change at a time. <b>Download</b> saves PNG or JPG.</li>
+</ol></details>
+</main>
+<footer style="text-align:center;color:var(--dim);font-size:12px;padding:20px">Part of <b>THE JAH NETWORK</b> · Signature AI Pixel · all editing happens on your device</footer>
+<script src="assets/engine.js"></script>
+<script>
+"use strict";
+/* ============ JAH network nav ============ */
+(function(){
+var B="https://justinahiggins614-cmyk.github.io/";
+var S=[[1,"Signature Math","signature-math/"],[2,"Signature Universal Paradox Immune Calculator","jah-calculator/"],[3,"The Signature Dictionary","jah-dictionary/"],[4,"JAH Wiki","jah-wiki/"],[5,"Wiki Leaks","jah-n-wiki-leaks/"],[6,"Signature Llama: The Fully Cyber Utilizable AI","signature-llama/"],[7,"The Signature AI Phone Book","jah-ai-models/"],[8,"Globally Rejustered Patent Catalog","cyber-patent-catalog/"],[9,"Signature Spec Catalog Pending Patents","signature-one-archive/specs.html"],[10,"The Signature PC System Depository","jah-computer-systems/"],[11,"The Signature Book Depository","signature-books/"],[12,"The Signature Comic Store","signature-comics/"],[13,"The Signature Global Newspaper Archive","signature-newspapers/"],[14,"The Signature AI Mad Scientist Creation Lab","signature-backend/"],[15,"The Signature Boundless Generator Archive","signature-boundless-generators/"],[16,"The Signature AI Mix Lab","signature-ai-mixlab/"],[17,"AI Olypics","signature-ai-olypics/"],[18,"The Signature Computer Chip Maker and Archive","signature-chip-maker/"],[19,"The Signature App Archive","signature-app-archive/"],[20,"The Signature AI Robot Matcher","signature-ai-robot-matcher/"],[21,"The Signature Experiment Solver","signature-experiment-solver/"],[22,"Signature AI Pixel","signature-ai-image-video-maker/"],[23,"Signature Music Studio","signature-ai-song-maker/"],[24,"The Signature Mr Fix-It","signature-fixit/"],[25,"The Signature University","signature-university/"],[26,"The Signature Cyber Mega-Mall","signature-cyber-mega-mall/"],[27,"The Signature 3D Print Mega Mall","signature-3d-print/"]];
+var h='<div style="width:100%;text-align:center;color:#b9a8e0;margin-bottom:6px">THE JAH NETWORK</div>';
+S.forEach(function(x){h+='<a href="'+B+x[2]+'">'+x[0]+' '+x[1]+'</a>';});
+h+='<span class="here">22 Signature AI Pixel — YOU ARE HERE</span>';
+document.getElementById("jahnet").innerHTML=h;
+})();
+function $(id){return document.getElementById(id);}
+function msg(t){$("msg").textContent=t;}
+</script>
+<script>
+"use strict";
+/* ============ state ============ */
+var work=document.createElement("canvas"),view=$("view"),vx=view.getContext("2d");
+var hist=[]; // undo stack (dataURLs of work)
+var F={b:100,c:100,s:100}; // filters
+var tool=null,cropBox=null,brushDown=false;
+var TG=null; // text ghost {text,x,y,size,color,el}
+function pushHist(){try{hist.push(work.toDataURL("image/png"));if(hist.length>15)hist.shift();}catch(e){}}
+function filterStr(){return "brightness("+(F.b/100)+") contrast("+(F.c/100)+") saturate("+(F.s/100)+")";}
+function render(){
+  view.width=work.width;view.height=work.height;
+  vx.save();vx.filter=filterStr();
+  vx.drawImage(work,0,0);vx.restore();
+  if(TG&&TG.el)syncGhost();
+}
+function commit(){pushHist();}
+/* ============ open ============ */
+function openImage(img){
+  var sc=Math.min(1,1600/Math.max(img.width,img.height));
+  work.width=Math.round(img.width*sc);work.height=Math.round(img.height*sc);
+  var g=work.getContext("2d");g.drawImage(img,0,0,work.width,work.height);
+  hist=[];F={b:100,c:100,s:100};
+  $("fb").value=100;$("fc").value=100;$("fs").value=100;
+  $("vb").textContent="100%";$("vc").textContent="100%";$("vs").textContent="100%";
+  clearGhost();setTool(null);
+  $("editcard").style.display="block";$("dlcard").style.display="block";
+  $("pinfo").textContent="Photo open — "+work.width+"×"+work.height+". Pick a tool below.";
+  render();msg("");
+}
+$("pfile").addEventListener("change",function(e){
+  var f=e.target.files[0];e.target.value="";if(!f)return;
+  var img=new Image();
+  img.onload=function(){openImage(img);URL.revokeObjectURL(img.src);};
+  img.onerror=function(){msg("Couldn't read that picture — try another one.");};
+  img.src=URL.createObjectURL(f);
+});
+$("psample").onclick=function(){
+  var c=document.createElement("canvas");c.width=960;c.height=600;
+  var g=c.getContext("2d");
+  var grd=g.createLinearGradient(0,0,960,600);
+  grd.addColorStop(0,"#ff2fb3");grd.addColorStop(0.5,"#3a2568");grd.addColorStop(1,"#00f0ff");
+  g.fillStyle=grd;g.fillRect(0,0,960,600);
+  g.fillStyle="#ffffff";g.font="bold 72px Verdana";g.textAlign="center";
+  g.fillText("SAMPLE",480,280);g.font="bold 36px Verdana";
+  g.fillText("paint on me · crop me · filter me",480,360);
+  for(var i=0;i<40;i++){g.fillStyle="rgba(255,255,255,"+(Math.random()*0.5)+")";
+    g.beginPath();g.arc(Math.random()*960,Math.random()*600,Math.random()*22+4,0,7);g.fill();}
+  openImage(c);
+};
+/* open a catalog good or ad (?good= / ?ad=) */
+function gz(path){return fetch(path).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r;})
+  .then(function(r){return new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).text();});}
+function rasterSVG(svgStr){
+  return new Promise(function(res,rej){
+    var img=new Image();
+    img.onload=function(){res(img);};img.onerror=function(){rej(new Error("bad svg"));};
+    img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svgStr);
+  });
+}
+(function deepLink(){
+  var q=new URLSearchParams(location.search);
+  var gid=q.get("good"),aid=q.get("ad");
+  if(!gid&&!aid)return;
+  msg("Loading the catalog artwork…");
+  function loadIdx(url){return gz(url).then(function(t){return t.trim().split("\n").map(JSON.parse);});}
+  if(gid){
+    loadIdx("data/index/goods.idx.json.gz").then(function(rows){
+      var r=rows.filter(function(x){return x[0]===gid;})[0];
+      if(!r)throw new Error("not found");
+      return gz("data/goods/"+r[3]);
+    }).then(function(t){
+      var m={};t.trim().split("\n").forEach(function(l){var g=JSON.parse(l);m[g.id]=g;});
+      var g=m[gid];if(!g)throw new Error("not found");
+      var art=SigArt.composeImage(g.prompt,{});
+      return rasterSVG(SigArt.mockupSVG(g.cat,art,g.seed));
+    }).then(function(img){openImage(img);msg("");})
+    .catch(function(){msg("Couldn't load that good — choose a photo instead.");});
+  }else{
+    loadIdx("data/index/ads.idx.json.gz").then(function(rows){
+      var r=rows.filter(function(x){return x[0]===aid;})[0];
+      if(!r)throw new Error("not found");
+      return gz("data/ads/"+r[3]);
+    }).then(function(t){
+      var m={};t.trim().split("\n").forEach(function(l){var a=JSON.parse(l);m[a.id]=a;});
+      var a=m[aid];if(!a)throw new Error("not found");
+      return rasterSVG(SigArt.adCreative(a));
+    }).then(function(img){openImage(img);msg("");})
+    .catch(function(){msg("Couldn't load that ad — choose a photo instead.");});
+  }
+})();
+/* ============ tools ============ */
+var toolBtns=document.querySelectorAll("[data-tool]");
+function setTool(t){
+  tool=t;cropBox=null;$("croprect").style.display="none";
+  toolBtns.forEach(function(b){b.classList.toggle("on",b.dataset.tool===t);});
+  ["p-filters","p-crop","p-text","p-brush"].forEach(function(id){$(id).classList.remove("on");});
+  if(t)$( "p-"+t).classList.add("on");
+  var sw=$("stagewrap");sw.style.cursor=(t==="crop"||t==="brush")?"crosshair":"default";
+}
+toolBtns.forEach(function(b){b.addEventListener("click",function(){
+  if(!work.width){msg("Open a photo first.");return;}
+  setTool(tool===b.dataset.tool?null:b.dataset.tool);
+});});
+/* filters */
+function bindF(id,vid,key){$(id).addEventListener("input",function(e){
+  F[key]=+e.target.value;$(vid).textContent=e.target.value+"%";render();});}
+bindF("fb","vb","b");bindF("fc","vc","c");bindF("fs","vs","s");
+document.querySelectorAll("[data-preset]").forEach(function(b){
+  b.addEventListener("click",function(){
+    var p=b.dataset.preset;
+    if(p==="normal")F={b:100,c:100,s:100};
+    else if(p==="bw")F={b:105,c:130,s:0};
+    else if(p==="sepia")F={b:105,c:90,s:40};
+    else if(p==="vintage")F={b:95,c:85,s:60};
+    else if(p==="vivid")F={b:105,c:125,s:160};
+    $("fb").value=F.b;$("fc").value=F.c;$("fs").value=F.s;
+    $("vb").textContent=F.b+"%";$("vc").textContent=F.c+"%";$("vs").textContent=F.s+"%";
+    render();
+  });
+});
+/* rotate / flip */
+function transform(fn){
+  if(!work.width)return;commit();
+  var c=document.createElement("canvas"),g=c.getContext("2d");
+  fn(c,g);var old=work;work=c;render();msg("");
+}
+$("rotl").onclick=function(){transform(function(c,g){
+  c.width=work.height;c.height=work.width;
+  g.translate(c.width/2,c.height/2);g.rotate(-Math.PI/2);g.drawImage(work,-work.width/2,-work.height/2);});};
+$("rotr").onclick=function(){transform(function(c,g){
+  c.width=work.height;c.height=work.width;
+  g.translate(c.width/2,c.height/2);g.rotate(Math.PI/2);g.drawImage(work,-work.width/2,-work.height/2);});};
+$("fliph").onclick=function(){transform(function(c,g){
+  c.width=work.width;c.height=work.height;
+  g.translate(c.width,0);g.scale(-1,1);g.drawImage(work,0,0);});};
+$("flipv").onclick=function(){transform(function(c,g){
+  c.width=work.width;c.height=work.height;
+  g.translate(0,c.height);g.scale(1,-1);g.drawImage(work,0,0);});};
+/* crop */
+var cropDrag=null;
+function evPos(e){
+  var r=view.getBoundingClientRect();
+  return{x:(e.clientX-r.left)/r.width*view.width,y:(e.clientY-r.top)/r.height*view.height};
+}
+view.addEventListener("pointerdown",function(e){
+  if(tool==="crop"){
+    var p=evPos(e);cropDrag={x0:p.x,y0:p.y};cropBox={x:p.x,y:p.y,w:0,h:0};
+    view.setPointerCapture(e.pointerId);drawCropRect();e.preventDefault();
+  }else if(tool==="brush"){
+    commit();brushDown=true;
+    var g=work.getContext("2d"),p=evPos(e);
+    g.strokeStyle=$("bcolor").value;g.lineWidth=+$("bsize").value;g.lineCap="round";
+    g.beginPath();g.moveTo(p.x,p.y);
+    view.setPointerCapture(e.pointerId);e.preventDefault();
+  }
+});
+view.addEventListener("pointermove",function(e){
+  if(tool==="crop"&&cropDrag){
+    var p=evPos(e);
+    cropBox={x:Math.min(cropDrag.x0,p.x),y:Math.min(cropDrag.y0,p.y),
+             w:Math.abs(p.x-cropDrag.x0),h:Math.abs(p.y-cropDrag.y0)};
+    drawCropRect();
+  }else if(tool==="brush"&&brushDown){
+    var g=work.getContext("2d"),p=evPos(e);
+    g.lineTo(p.x,p.y);g.stroke();render();
+  }
+});
+view.addEventListener("pointerup",function(){cropDrag=null;brushDown=false;});
+function drawCropRect(){
+  var r=$("croprect");
+  if(!cropBox||cropBox.w<4){r.style.display="none";return;}
+  r.style.display="block";
+  r.style.left=(cropBox.x/view.width*100)+"%";r.style.top=(cropBox.y/view.height*100)+"%";
+  r.style.width=(cropBox.w/view.width*100)+"%";r.style.height=(cropBox.h/view.height*100)+"%";
+}
+$("cropgo").onclick=function(){
+  if(!cropBox||cropBox.w<10||cropBox.h<10){msg("Drag a box on the photo first.");return;}
+  commit();
+  var c=document.createElement("canvas");
+  c.width=Math.round(cropBox.w);c.height=Math.round(cropBox.h);
+  c.getContext("2d").drawImage(work,cropBox.x,cropBox.y,cropBox.w,cropBox.h,0,0,c.width,c.height);
+  work=c;setTool(null);render();msg("Cropped.");
+};
+$("cropcancel").onclick=function(){setTool(null);};
+$("bsize").addEventListener("input",function(e){$("vbs").textContent=e.target.value;});
+/* text */
+$("tplace").onclick=function(){
+  var t=$("twords").value.trim();
+  if(!t){msg("Type the words first.");return;}
+  clearGhost();
+  TG={text:t,x:0.08,y:0.08,size:+$("tsize").value,color:$("tcolor").value,el:null};
+  var d=document.createElement("div");d.className="txtghost";d.textContent=t;
+  TG.el=d;$("stagewrap").appendChild(d);syncGhost();
+  d.addEventListener("pointerdown",function(e){
+    e.preventDefault();d.setPointerCapture(e.pointerId);
+    var r=$("stagewrap").getBoundingClientRect(),ox=e.clientX,oy=e.clientY,sx=TG.x,sy=TG.y;
+    function mv(ev){
+      TG.x=Math.max(0,Math.min(0.95,sx+(ev.clientX-ox)/r.width));
+      TG.y=Math.max(0,Math.min(0.95,sy+(ev.clientY-oy)/r.height));
+      syncGhost();
+    }
+    function up(){d.removeEventListener("pointermove",mv);d.removeEventListener("pointerup",up);}
+    d.addEventListener("pointermove",mv);d.addEventListener("pointerup",up);
+  });
+  d.addEventListener("dblclick",clearGhost);
+  msg("Drag the words where you want them, then “Stamp it down”.");
+};
+function syncGhost(){
+  if(!TG||!TG.el)return;
+  var w=$("stagewrap").clientWidth;
+  TG.el.style.left=(TG.x*100)+"%";TG.el.style.top=(TG.y*100)+"%";
+  TG.el.style.fontSize=Math.round(TG.size*w/960)+"px";
+  TG.el.style.color=TG.color;TG.el.textContent=TG.text;
+}
+window.addEventListener("resize",syncGhost);
+function clearGhost(){if(TG&&TG.el&&TG.el.parentNode)TG.el.parentNode.removeChild(TG.el);TG=null;}
+$("tstamp").onclick=function(){
+  if(!TG){msg("Place the words first.");return;}
+  commit();
+  var g=work.getContext("2d");
+  g.font="bold "+Math.round(TG.size*work.width/960)+"px Verdana";
+  g.fillStyle=TG.color;g.textBaseline="top";
+  g.shadowColor="#000";g.shadowBlur=6;
+  g.fillText(TG.text,TG.x*work.width,TG.y*work.height);
+  g.shadowBlur=0;clearGhost();render();msg("Words stamped.");
+};
+$("tremove").onclick=function(){clearGhost();msg("");};
+/* undo */
+$("undo").onclick=function(){
+  if(!hist.length){msg("Nothing to undo.");return;}
+  var url=hist.pop(),img=new Image();
+  img.onload=function(){
+    work.width=img.width;work.height=img.height;
+    work.getContext("2d").drawImage(img,0,0);
+    clearGhost();render();msg("Undone.");
+  };
+  img.src=url;
+};
+/* download */
+function finalCanvas(){
+  var c=document.createElement("canvas");c.width=work.width;c.height=work.height;
+  var g=c.getContext("2d");g.filter=filterStr();g.drawImage(work,0,0);
+  return c;
+}
+$("dlpng").onclick=function(){
+  finalCanvas().toBlob(function(b){
+    if(!b){msg("Couldn't make the PNG in this browser.");return;}
+    dl(URL.createObjectURL(b),"signature-photo.png");
+  },"image/png");
+};
+$("dljpg").onclick=function(){
+  var c=finalCanvas(),g=c.getContext("2d");
+  var flat=document.createElement("canvas");flat.width=c.width;flat.height=c.height;
+  var fg=flat.getContext("2d");fg.fillStyle="#fff";fg.fillRect(0,0,flat.width,flat.height);
+  fg.drawImage(c,0,0);
+  flat.toBlob(function(b){
+    if(!b){msg("Couldn't make the JPG in this browser.");return;}
+    dl(URL.createObjectURL(b),"signature-photo.jpg");
+  },"image/jpeg",0.92);
+};
+function dl(url,name){
+  var a=document.createElement("a");a.href=url;a.download=name;
+  document.body.appendChild(a);a.click();setTimeout(function(){a.remove();},600);
+}
+</script>
+</body>
+</html>
