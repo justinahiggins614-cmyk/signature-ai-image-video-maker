@@ -118,17 +118,17 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 /* ---- first-time tour + guide panel (usability wave, theme untouched) ---- */
 #pxguidebtn{position:fixed;left:14px;bottom:14px;z-index:75;width:48px;height:48px;border-radius:50%;border:2px solid var(--gold);background:var(--card);color:var(--gold);font-size:22px;font-weight:bold;cursor:pointer;font-family:inherit}
 #pxguidebtn:hover{background:#2a1a08}
-#pxtourover{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:80;display:none}
-#pxtourbox{position:fixed;z-index:81;display:none;max-width:330px;background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:16px;font-size:13px;line-height:1.6}
-#pxtourbox h3{margin:0 0 8px;color:var(--gold);font-size:15px}
-#pxtourbox .tw{margin:6px 0}#pxtourbox .tw b{color:var(--acc)}
-#pxtourbox .trow{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-#pxtourbox button{background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:10px 16px;min-height:44px;cursor:pointer;font-family:inherit;font-size:14px}
-#pxtourbox button.go{background:linear-gradient(90deg,#0a7d8c,#00f0ff);color:#03252b;font-weight:bold;border:none}
-.pxtourhi{outline:3px solid var(--gold)!important;outline-offset:3px;border-radius:8px}
-#pxtourask{position:fixed;z-index:81;display:none;left:50%;bottom:76px;transform:translateX(-50%);background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:14px 18px;font-size:14px;max-width:92vw;text-align:center}
-#pxtourask button{margin:6px 4px 0;background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:10px 18px;min-height:44px;cursor:pointer;font-family:inherit;font-size:14px}
-#pxtourask button.go{background:linear-gradient(90deg,#0a7d8c,#00f0ff);color:#03252b;font-weight:bold;border:none}
+/* TOUR FIX 2026-10-04: welcome overlay only — no auto-scroll, no spotlight, no screen-leading. */
+#pxtourover{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:90;display:none;overflow:auto;padding:18px 14px}
+#pxtourover.open{display:block}
+#pxtourmodal{position:relative;margin:6vh auto 0;width:min(480px,94vw);background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:20px 20px 16px;font-family:inherit;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+#pxtourmodal h3{margin:0 0 8px;color:var(--gold);font-size:16px}
+#pxtourmodal ol{margin:8px 0 4px;padding-left:1.3em}
+#pxtourmodal li{margin:9px 0;font-size:13.5px;line-height:1.6;color:var(--txt)}
+#pxtourmodal li b{color:var(--acc)}
+#pxtourmodal .touract{margin-top:16px;text-align:center}
+#pxtouroverbtn{min-height:52px;padding:14px 46px;border-radius:10px;border:none;background:linear-gradient(90deg,#0a7d8c,#00f0ff);color:#03252b;font-weight:bold;font-size:15px;font-family:inherit;cursor:pointer}
+#pxtourhelp{display:block;margin:10px auto 0;background:none;border:none;color:var(--gold);text-decoration:underline;cursor:pointer;font-size:13px;font-family:inherit;min-height:44px}
 #pxguide{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:82;display:none;align-items:center;justify-content:center;padding:12px}
 #pxguide.on{display:flex}
 #pxguide .gbox{background:var(--card);border:1px solid var(--line);border-radius:16px;max-width:680px;width:100%;max-height:88vh;overflow:auto;padding:22px;font-size:14px;line-height:1.7}
@@ -329,19 +329,19 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 
 <!-- first-time tour + permanent guide (usability wave; look untouched) -->
 <button id="pxguidebtn" aria-label="Open the how-to guide" title="How to use this site">?</button>
-<div id="pxtourover" aria-hidden="true"></div>
-<div id="pxtourbox" role="dialog" aria-label="Site tour" aria-live="polite">
-<h3 id="pxtourtitle"></h3>
-<div class="tw" id="pxtourtext"></div>
-<div class="trow">
-<button class="go" id="pxtournext">Next →</button>
-<button id="pxtourback">← Back</button>
-<button id="pxtourskip">Skip tour</button>
+<div id="pxtourover" aria-hidden="true">
+<div id="pxtourmodal" role="dialog" aria-modal="true" aria-labelledby="pxtourh">
+<h3 id="pxtourh">Welcome to Signature AI Pixel</h3>
+<ol>
+<li><b>Image Studio:</b> type a description, pick a style, press <b>GENERATE IMAGE</b> — the same words always make the same artwork.</li>
+<li><b>Video Studio:</b> describe a scene, pick a length, press <b>GENERATE VIDEO</b> — the preview plays on your device and exports a real .webm file.</li>
+<li><b>Goods Catalog:</b> free downloadable design mockups — posters, stickers, shirts, surfboards — each with a permanent <b>JAH-GOODS ID</b>.</li>
+<li><b>Product Ads:</b> ready-made image + video ads for Signature products, stored as made.</li>
+<li><b>Take the AI:</b> download <b>engine.js</b> + <b>sigart.py</b> and run the whole generator offline — same prompt, same art.</li>
+</ol>
+<div class="touract"><button id="pxtouroverbtn">Got it</button></div>
+<button id="pxtourhelp">Full guide</button>
 </div>
-</div>
-<div id="pxtourask" role="dialog" aria-label="Take the tour?">
-<div><b>New here?</b> Take the 1-minute tour of Signature AI Pixel.</div>
-<div><button class="go" id="pxtourstart">Start tour</button><button id="pxtourno">Skip</button></div>
 </div>
 <div id="pxguide" role="dialog" aria-label="How to use Signature AI Pixel">
 <div class="gbox">
@@ -975,98 +975,31 @@ addEventListener("load",function(){setTimeout(function(){
 },400)})})();
 </script>
 <script>
-/* ================= FIRST-TIME TOUR + GUIDE PANEL (usability wave) ================= */
-var PixelTour=(function(){
+/* ================= TOUR FIX 2026-10-04: welcome overlay only (no auto-scroll, no spotlight). localStorage jah-tour-seen-pixel ================= */
+(function(){
   var FLAG="jah-tour-seen-pixel";
-  var steps=[
-    {tab:"image",el:"imgprompt",title:"1 of 6 · 🎨 Image Studio",
-     what:"WHAT: the image maker — type words, get a finished picture.",
-     does:"WHAT IT DOES: renders deterministic art on your device. The same prompt always makes the same artwork.",
-     how:"HOW: type a description, pick a style, press GENERATE IMAGE. “Surprise me” fills in a random idea."},
-    {tab:"video",el:"vidgo",title:"2 of 6 · 🎬 Video Studio",
-     what:"WHAT: the video maker — type words, get a moving scene.",
-     does:"WHAT IT DOES: plays a live animation preview on your device, and exports a real .webm file.",
-     how:"HOW: describe the scene, pick a length, press GENERATE VIDEO. .webm export needs Chrome/Edge on desktop."},
-    {tab:"goods",el:"gq",title:"3 of 6 · 🛍️ Goods Catalog",
-     what:"WHAT: printable design mockups — posters, stickers, shirts, surfboards and more.",
-     does:"WHAT IT DOES: every good is a free downloadable design file with a permanent JAH-GOODS ID, marching to 1,000,000.",
-     how:"HOW: search by keyword, filter by category, or browse A–Z. Tap a card for downloads, copy, read-aloud and share."},
-    {tab:"ads",el:"ago",title:"4 of 6 · 📢 Product Ads",
-     what:"WHAT: auto-made ad creatives for Signature products.",
-     does:"WHAT IT DOES: an image ad plus a video ad per product, stored as made.",
-     how:"HOW: search by product, open an ad, download the image creative or preview the video ad."},
-    {tab:"take",el:"dljs",title:"5 of 6 · 💾 Take the AI",
-     what:"WHAT: the whole generator in two files.",
-     does:"WHAT IT DOES: engine.js (browser) and sigart.py (Python) run offline anywhere — same prompt, same art.",
-     how:"HOW: press the download buttons, or copy the source. You can try the downloadable engine right on the page."},
-    {tab:"ask",el:"qago",title:"6 of 6 · ❓ Ask",
-     what:"WHAT: Pixel Guide — the AI that talks here.",
-     does:"WHAT IT DOES: answers questions about generation, the catalog, ads, and taking the engine with you.",
-     how:"HOW: type a question and press Ask."}
-  ];
-  var i=0;
+  var over=document.getElementById("pxtourover");
   function seen(){try{return localStorage.getItem(FLAG)==="1";}catch(e){return true;}}
   function mark(){try{localStorage.setItem(FLAG,"1");}catch(e){}}
-  function show(){
-    var s=steps[i],vw=window.innerWidth||1024,vh=window.innerHeight||800;
-    try{if(typeof goTab==="function")goTab(s.tab);}catch(e){}
-    var t=document.getElementById(s.el);
-    document.querySelectorAll(".pxtourhi").forEach(function(x){x.classList.remove("pxtourhi");});
-    document.getElementById("pxtourover").style.display="block";
-    var box=document.getElementById("pxtourbox");
-    document.getElementById("pxtourtitle").textContent=s.title;
-    document.getElementById("pxtourtext").innerHTML=
-      "<div class='tw'><b>"+esc(s.what)+"</b></div>"+
-      "<div class='tw'>"+esc(s.does)+"</div>"+
-      "<div class='tw'>"+esc(s.how)+"</div>";
-    box.style.display="block";box.style.transform="";
-    if(t){
-      t.classList.add("pxtourhi");
-      try{t.scrollIntoView({block:"center"});}catch(e){}
-      var r=t.getBoundingClientRect(),bw=330;
-      var left=Math.max(8,Math.min(vw-bw-8,r.left));
-      var top=r.bottom+10;if(top+280>vh)top=Math.max(8,r.top-290);
-      box.style.left=left+"px";box.style.top=top+"px";box.style.maxWidth=bw+"px";
-    }else{box.style.left="50%";box.style.top="80px";box.style.transform="translateX(-50%)";}
-    document.getElementById("pxtourback").style.display=i===0?"none":"";
-    document.getElementById("pxtournext").textContent=i===steps.length-1?"Finish ✓":"Next →";
-    try{document.getElementById("pxtournext").focus();}catch(e){}
-  }
-  function hide(){
-    document.getElementById("pxtourover").style.display="none";
-    document.getElementById("pxtourbox").style.display="none";
-    document.getElementById("pxtourask").style.display="none";
-    document.querySelectorAll(".pxtourhi").forEach(function(x){x.classList.remove("pxtourhi");});
-  }
-  return{
-    start:function(){i=0;hide();show();},
-    next:function(){i++;if(i>=steps.length){this.close(true);}else show();},
-    back:function(){if(i>0){i--;show();}},
-    close:function(done){hide();if(done)mark();},
-    maybeAsk:function(){if(!seen())document.getElementById("pxtourask").style.display="block";},
-    seen:seen
-  };
+  function openTour(){over.classList.add("open");over.setAttribute("aria-hidden","false");}
+  function closeTour(){over.classList.remove("open");over.setAttribute("aria-hidden","true");mark();}
+  document.getElementById("pxtouroverbtn").onclick=closeTour;
+  document.getElementById("pxtourhelp").onclick=function(){closeTour();pxGuideOpen();};
+  over.addEventListener("click",function(e){if(e.target===over)closeTour();});
+  function pxGuideOpen(){document.getElementById("pxguide").classList.add("on");try{document.getElementById("pxguidex").focus();}catch(e){}}
+  function pxGuideClose(){document.getElementById("pxguide").classList.remove("on");}
+  /* ? button re-opens the welcome tour */
+  document.getElementById("pxguidebtn").onclick=function(){openTour();};
+  document.getElementById("pxguidex").onclick=pxGuideClose;
+  document.getElementById("pxguidetour").onclick=function(){pxGuideClose();openTour();};
+  document.addEventListener("keydown",function(e){
+    var tourOn=over.classList.contains("open");
+    var guideOn=document.getElementById("pxguide").classList.contains("on");
+    if(tourOn){if(e.key==="Escape")closeTour();}
+    else if(guideOn&&e.key==="Escape"){pxGuideClose();}
+  });
+  window.addEventListener("load",function(){setTimeout(function(){if(!seen())openTour();},1500);});
 })();
-document.getElementById("pxtourstart").onclick=function(){PixelTour.start();};
-document.getElementById("pxtourno").onclick=function(){PixelTour.close(true);};
-document.getElementById("pxtournext").onclick=function(){PixelTour.next();};
-document.getElementById("pxtourback").onclick=function(){PixelTour.back();};
-document.getElementById("pxtourskip").onclick=function(){PixelTour.close(true);};
-function pxGuideOpen(){document.getElementById("pxguide").classList.add("on");try{document.getElementById("pxguidex").focus();}catch(e){}}
-function pxGuideClose(){document.getElementById("pxguide").classList.remove("on");}
-document.getElementById("pxguidebtn").onclick=pxGuideOpen;
-document.getElementById("pxguidex").onclick=pxGuideClose;
-document.getElementById("pxguidetour").onclick=function(){pxGuideClose();PixelTour.start();};
-document.addEventListener("keydown",function(e){
-  var tourOn=document.getElementById("pxtourbox").style.display==="block";
-  var guideOn=document.getElementById("pxguide").classList.contains("on");
-  if(tourOn){
-    if(e.key==="Escape")PixelTour.close(true);
-    else if(e.key==="ArrowRight")PixelTour.next();
-    else if(e.key==="ArrowLeft")PixelTour.back();
-  }else if(guideOn&&e.key==="Escape"){pxGuideClose();}
-});
-window.addEventListener("load",function(){setTimeout(function(){PixelTour.maybeAsk();},1500);});
 </script>
 </body>
 </html>
