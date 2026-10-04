@@ -20,5 +20,16 @@
     "created": "2026-10-04",
     "made_by": "your AI",
     "note": "Worker pipeline test \u2014 fulfilled from issue #1"
+  },
+  {
+    "id": "JAH-GEN-000003",
+    "type": "video",
+    "prompt": "Slow cinematic drone shot flying over a neon-lit cyberpunk city at night in the rain, glowing signs reflecting in wet streets, flying vehicles passing between towers.",
+    "style": "cinematic film",
+    "aspect": "-",
+    "file": "gallery/ai-studio/JAH-GEN-000003.mp4",
+    "created": "2026-10-04",
+    "made_by": "your AI",
+    "note": "Studio sample \u2014 first real model video on this site (720p, 10s)"
   }
 ]
