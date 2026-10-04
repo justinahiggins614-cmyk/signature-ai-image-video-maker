@@ -1,0 +1,5 @@
+{
+  "next_id": 3,
+  "note": "Fulfilled AI Studio requests. IDs increment per finished piece. Requests arrive as GitHub issues labeled gen-request; the worker fulfills them oldest-first and records each here.",
+  "prefix": "JAH-GEN-"
+}

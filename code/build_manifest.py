@@ -10,6 +10,7 @@ QA gates (exit 1 on failure — the drip must not publish a broken build):
   G1 duplicate IDs          G2 ID contiguity        G3 index row agreement
   G4 manifest/index/chunk/API count agreement
   G5 chunk presence for every index row
+  G6 goods-catalog counts + lazy files    G7 ads-catalog counts + lazy files
 """
 import gzip, hashlib, json, os, sys, time
 
@@ -223,6 +224,23 @@ def main():
     gate("G6 goods-cat lazy files == category count",
          set(f[:-8] for f in _catfiles) == _catslugs,
          f"{len(_catfiles)} files vs {len(_catslugs)} categories")
+
+    # G7: ads-catalog.html stamped counts + ads-az lazy files agree with state
+    ah_p = os.path.join(BASE, "ads-catalog.html")
+    _ah = open(ah_p, encoding="utf-8").read() if os.path.exists(ah_p) else ""
+    _m7 = _re.search(r'id="statline"[^>]*data-ads="(\d+)"', _ah)
+    gate("G7 ads-catalog.html stamped ads count == ads_state.json ads_total",
+         bool(_m7) and int(_m7.group(1)) == ast.get("ads_total", -1),
+         f"stamped {_m7.group(1) if _m7 else 'MISSING'} vs {ast.get('ads_total')}")
+    _az = os.path.join(BASE, "data", "index", "ads-az")
+    _azsum = 0
+    for _f in sorted(os.listdir(_az)):
+        if _f.endswith(".json.gz"):
+            with gzip.open(os.path.join(_az, _f), "rt", encoding="utf-8") as fh:
+                _azsum += len(json.loads(fh.read()))
+    gate("G7 ads-az lazy letter files total == ads_total",
+         _azsum == ast.get("ads_total", -1),
+         f"{_azsum} rows vs {ast.get('ads_total')}")
 
     if fails:
         print("MANIFEST NOT WRITTEN — gates failed")

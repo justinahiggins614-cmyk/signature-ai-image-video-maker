@@ -8,7 +8,7 @@
 <h1>🛍️ Signature AI Pixel — Goods Catalog</h1>
 <p class="stat" id="statline" data-goods="23000" data-ads="5850">🛍️ <b>23,000</b> goods across <b>24</b> categories · 📣 <b>5,850</b> product ads · marching to <b>1,000,000</b> goods · stamped 2026-10-04</p>
 <p>Every way an image can live in the world: posters, stickers, shirts, surfboards and more. Each good carries original Signature art as a <b>DESIGN MOCKUP</b> — a generated printable design, not a physically manufactured product.</p>
-<p>Interactive studio: <a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a> · <a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?tab=goods">Goods Catalog tab</a> · <a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?tab=ads">Ad archive</a> · Machine feed: <a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/pixel-catalog.json">pixel-catalog.json</a></p>
+<p>Interactive studio: <a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a> · <a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?tab=goods">Goods Catalog tab</a> · <a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?tab=ads">Ad archive</a> · <a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/ads-catalog.html">A–Z ad archive</a> · Machine feed: <a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/pixel-catalog.json">pixel-catalog.json</a></p>
 <div class="searchbar"><input id="q" type="search" placeholder="Search all goods… (try \u201csticker\u201d)" aria-label="Search all 23,000 goods"><div id="results" role="status" aria-live="polite"></div></div>
 <h2>Browse by category (A–Z)</h2>
 <div id="cats">
@@ -55,8 +55,7 @@ function renderCat(det,rows){
     by[L].forEach(function(r){
       html+='<li><a href="'+SITE+'?goods='+encodeURIComponent(r[0])+'"><b>'+esc(r[0])+'</b></a> '
         +'<span class="gname">'+esc(r[1])+'</span>'
-        +'<span class="gdesc">'+esc(r[2])+' — DESIGN MOCKUP</span>'
-        +' <a href="edit-photo.html?good='+encodeURIComponent(r[0])+'" title="Open in Photo Shop">✏️</a></li>';
+        +'<span class="gdesc">'+esc(r[2])+' — DESIGN MOCKUP</span></li>';
     });
     html+='</ul></details>';
   });
@@ -91,7 +90,7 @@ box.addEventListener("input",function(){
       if(r[0].toLowerCase().indexOf(q)>-1||r[1].toLowerCase().indexOf(q)>-1||r[2].toLowerCase().indexOf(q)>-1)hits.push(r);}
     if(!hits.length){res.innerHTML="<p>No goods match \u201c"+esc(q)+"\u201d.</p>";return;}
     var html="<ul>";
-    hits.forEach(function(r){html+='<li><a href="'+SITE+'?goods='+encodeURIComponent(r[0])+'"><b>'+esc(r[0])+'</b></a> <span class="gname">'+esc(r[1])+'</span> <span class="gcat">'+esc(r[2])+'</span> <a href="edit-photo.html?good='+encodeURIComponent(r[0])+'" title="Open in Photo Shop">✏️</a></li>';});
+    hits.forEach(function(r){html+='<li><a href="'+SITE+'?goods='+encodeURIComponent(r[0])+'"><b>'+esc(r[0])+'</b></a> <span class="gname">'+esc(r[1])+'</span> <span class="gcat">'+esc(r[2])+'</span></li>';});
     res.innerHTML=html+"</ul><p>"+hits.length+(hits.length===25?" (top 25)":"")+" match"+(hits.length===1?"":"es")+".</p>";
   });
 });

@@ -215,6 +215,7 @@ box.addEventListener("input",function(){
              f'<p>Interactive studio: <a href="{SITE}">Signature AI Pixel</a> · '
              f'<a href="{SITE}?tab=goods">Goods Catalog tab</a> · '
              f'<a href="{SITE}?tab=ads">Ad archive</a> · '
+             f'<a href="{SITE}ads-catalog.html">A–Z ad archive</a> · '
              f'Machine feed: <a href="{SITE}data/pixel-catalog.json">pixel-catalog.json</a></p>',
              '<div class="searchbar"><input id="q" type="search" placeholder="Search all goods… (try \\u201csticker\\u201d)" '
              f'aria-label="Search all {goods_total:,} goods"><div id="results" role="status" aria-live="polite"></div></div>',
@@ -235,11 +236,135 @@ box.addEventListener("input",function(){
         f.write("\n".join(parts))
     print(f"A–Z archive: {p} ({goods_total:,} goods, {ncat} categories, stamped {today})")
 
+def letter_group(name):
+    ch = (name or "").strip()[:1].upper()
+    return ch if "A" <= ch <= "Z" else "#"
+
+def write_ads_archive(ads_total):
+    """ads-catalog.html — the full A–Z ad archive (Manon's network-wide order):
+    per-letter collapsible <details> lazily loaded from data/index/ads-az/<L>.json.gz
+    (rows [id, name, site] sorted by name, 250/page + Show more); count header
+    stamped from data/ads_state.json (fail loud on mismatch)."""
+    rows = []
+    idx_p = os.path.join(BASE, "data", "index", "ads.idx.json.gz")
+    with gzip.open(idx_p, "rt", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                r = json.loads(line)
+                rows.append((r[0], r[1] or "", r[2] or ""))
+    assert len(rows) == ads_total, f"ads idx {len(rows)} != state ads_total {ads_total}"
+    groups = {}
+    for (i, n, s) in rows:
+        groups.setdefault(letter_group(n), []).append((i, n, s))
+    order = [chr(c) for c in range(ord("A"), ord("Z") + 1)] + ["#"]
+    counts = {}
+    d = os.path.join(BASE, "data", "index", "ads-az")
+    os.makedirs(d, exist_ok=True)
+    for L in order:
+        g = sorted(groups.get(L, []), key=lambda r: (r[1] or "").lower())
+        counts[L] = len(g)
+        with gzip.open(os.path.join(d, L + ".json.gz"), "wt", encoding="utf-8") as f:
+            json.dump([[i, n, s] for (i, n, s) in g], f, separators=(",", ":"))
+    with open(os.path.join(BASE, "data", "index", "ads-az-manifest.json"), "w") as f:
+        json.dump({"total": ads_total, "built": local_today(), "counts": counts}, f, indent=1)
+    print(f"ads-az lazy files: {d} ({ads_total:,} ads)")
+    today = local_today()
+    details = []
+    for L in order:
+        details.append(
+            f'<details class="let" data-letter="{esc_h(L)}">'
+            f'<summary><b>{esc_h(L)}</b> <span class="n">{counts[L]:,} ads — tap to browse</span></summary>'
+            f'<div class="lbody"><p class="loading">Loading {esc_h(L)} ads…</p></div></details>')
+    js = '''
+(function(){
+var SITE=%%SITEJS%%, PAGE=250, loaded={};
+function gz(path){return fetch(path).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r;})
+ .then(function(r){return new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).text();});}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function adLink(r){return '<li><a href="'+SITE+'?ad='+encodeURIComponent(r[0])+'"><b>'+esc(r[0])+'</b></a> '
+  +'<span class="gname">'+esc(r[1])+'</span> <span class="gcat">'+esc(r[2])+'</span></li>';}
+function render(det,rows){
+  var body=det.querySelector(".lbody");
+  function page(shown){
+    var next=Math.min(shown+PAGE,rows.length);
+    body.innerHTML='<ul>'+rows.slice(0,next).map(adLink).join("")+'</ul>'+
+      (next<rows.length?'<p><button class="mbtn" type="button">Show more ('+(rows.length-next).toLocaleString()+' left)</button></p><p class="capnote">Showing '+next.toLocaleString()+' of '+rows.length.toLocaleString()+' ads.</p>':'');
+    var b=body.querySelector(".mbtn");
+    if(b)b.addEventListener("click",function(){page(next);});
+  }
+  page(0);
+}
+document.querySelectorAll("details.let").forEach(function(det){
+  det.addEventListener("toggle",function(){
+    var L=det.dataset.letter;
+    if(!det.open||loaded[L])return;
+    loaded[L]=true;
+    var body=det.querySelector(".lbody");
+    if(typeof DecompressionStream==="undefined"){body.innerHTML="<p>Your browser can't unzip the archive data. Try Chrome or Edge.</p>";return;}
+    gz("data/index/ads-az/"+encodeURIComponent(L)+".json.gz").then(function(t){
+      render(det,JSON.parse(t));
+    }).catch(function(e){body.innerHTML="<p>Couldn't load this letter ("+esc(e.message)+"). Try again.</p>";loaded[L]=false;});
+  });
+});
+})();
+'''
+    js = js.replace("%%SITEJS%%", json.dumps(SITE))
+    parts = ['<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">',
+             '<meta name="viewport" content="width=device-width,initial-scale=1">',
+             '<title>Signature AI Pixel — Ad Catalog (A–Z archive)</title>',
+             '<meta name="description" content="The full A–Z Signature AI Pixel ad archive: every product ad, searchable, grouped by product name. Auto-made creative mockups — nothing is for sale.">',
+             f'<link rel="canonical" href="{SITE}ads-catalog.html">',
+             '<style>body{background:#0a0618;color:#f2ecff;font-family:Verdana,system-ui,sans-serif;'
+             'margin:0;padding:24px;max-width:1100px}a{color:#00f0ff}h1{font-size:26px}'
+             '.stat{font-size:15px;color:#b9a8e0}.stat b{color:#ffd166}'
+             'details.let{margin:8px 0;border:1px solid #3a2568;border-radius:10px;background:#120b2a}'
+             'details.let>summary{cursor:pointer;padding:14px 16px;font-size:16px;list-style:none}'
+             'details.let>summary::-webkit-details-marker{display:none}'
+             'details.let>summary b{color:#ffd166;font-size:20px}details.let>summary .n{color:#b9a8e0;font-size:13px;margin-left:8px}'
+             'details.let[open]>summary{border-bottom:1px solid #3a2568}'
+             '.lbody{padding:6px 16px 14px}.lbody ul{list-style:none;padding:0;margin:6px 0}'
+             '.lbody li{padding:7px 0;border-bottom:1px solid #241545;font-size:14px}'
+             '.gname{color:#ffd166}.gcat{color:#b9a8e0;font-size:12px;margin-left:6px}'
+             '.mbtn{background:transparent;color:#00f0ff;border:1px solid #00f0ff;border-radius:10px;'
+             'padding:10px 18px;font-size:14px;cursor:pointer;font-family:inherit}'
+             '.capnote{color:#b9a8e0;font-size:12px}.loading{color:#b9a8e0}'
+             'footer{margin-top:40px;font-size:12px;color:#b9a8e0;border-top:1px solid #3a2568;padding-top:12px}</style>',
+             '</head><body>',
+             '<h1>\U0001f4e2 Signature AI Pixel — Ad Catalog</h1>',
+             f'<p class="stat" id="statline" data-ads="{ads_total}">'
+             f'\U0001f4e2 <b>{ads_total:,}</b> product ads · marching to <b>1,000,000</b> goods '
+             f'· stamped {today}</p>',
+             '<p>The engine watches the catalogs and makes an image ad and a video ad for every '
+             'Signature product — stored as made. Each ad is a <b>GENERATED CREATIVE MOCKUP</b> '
+             'for a Signature product, not a live commercial listing. Nothing here is for sale.</p>',
+             f'<p>Interactive studio: <a href="{SITE}">Signature AI Pixel</a> · '
+             f'<a href="{SITE}?tab=ads">Ad archive tab</a> · '
+             f'<a href="{SITE}goods-catalog.html">A–Z goods archive</a> · '
+             f'Machine feed: <a href="{SITE}data/pixel-catalog.json">pixel-catalog.json</a></p>',
+             '<h2 style="color:#ffd166">Browse by product name (A–Z)</h2>',
+             '<div id="letters">']
+    parts.extend(details)
+    parts.append('</div>')
+    parts.append(f'<noscript><p>No JavaScript? Every ad is listed in the '
+                 f'<a href="{SITE}sitemap-ads-1.xml">ad sitemap</a>, and records open at '
+                 f'{SITE}?ad=JAH-AD-000001.</p></noscript>')
+    parts.append('<footer><p><b>SIGNATURE AI PIXEL</b> — the full ad archive. '
+                 'Each letter loads lazily: nothing downloads until you open it.</p>'
+                 f'<p><a href="{SITE}">← back to Signature AI Pixel</a></p></footer>')
+    parts.append('<script>' + js + '</script>')
+    parts.append('</body></html>')
+    p = os.path.join(BASE, "ads-catalog.html")
+    with open(p, "w") as f:
+        f.write("\n".join(parts))
+    print(f"A–Z archive: {p} ({ads_total:,} ads, stamped {today})")
+
 def main():
     goods = goods_ids()
     ads = ads_ids()
     pages = [SITE, SITE + "?tab=image", SITE + "?tab=video", SITE + "?tab=goods",
              SITE + "?tab=ads", SITE + "?tab=take", SITE + "goods-catalog.html",
+             SITE + "ads-catalog.html",
              SITE + "edit-video.html", SITE + "edit-photo.html",
              SITE + "pixel-manifest.json", SITE + "ai-manifest.json", SITE + "llms.txt",
              SITE + "api.json", SITE + "data/counts.json", SITE + "data/pixel-catalog.json",
@@ -286,6 +411,7 @@ def main():
         cats.setdefault(c or "misc", []).append((i, n, d))
     write_goods_cat_files(cats)  # lazy per-category data, BEFORE the page that references it
     write_goods_catalog_html(rows, ads, st.get("goods_total", 0), ast.get("ads_total", 0))
+    write_ads_archive(ast.get("ads_total", 0))  # per-letter lazy data + ads-catalog.html
     # authoritative manifest + instant counts + QA gates (fails the build on disagreement)
     import subprocess as _sp
     _r = _sp.run([sys.executable, os.path.join(BASE, "code", "build_manifest.py")])

@@ -1,0 +1,24 @@
+[
+  {
+    "aspect": "16:9",
+    "created": "2026-10-04",
+    "file": "gallery/ai-studio/JAH-GEN-000001.webp",
+    "id": "JAH-GEN-000001",
+    "made_by": "your AI",
+    "note": "Studio sample \u2014 first real model generation on this site",
+    "prompt": "Photorealistic cinematic interior of a futuristic cyber music studio at night: glowing holographic mixing consoles, neon purple and gold light strips, floating 3D sound-wave sculptures, a sleek microphone on a stand, floor-to-ceiling windows overlooking a neon city, ultra-detailed, movie-quality lighting, 16:9 composition",
+    "style": "cinematic",
+    "type": "image"
+  },
+  {
+    "id": "JAH-GEN-000002",
+    "type": "image",
+    "prompt": "a neon dragon curled around a castle tower under a full moon, cinematic",
+    "style": "cinematic film",
+    "aspect": "16:9",
+    "file": "gallery/ai-studio/JAH-GEN-000002.webp",
+    "created": "2026-10-04",
+    "made_by": "your AI",
+    "note": "Worker pipeline test \u2014 fulfilled from issue #1"
+  }
+]

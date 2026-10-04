@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Made by Your AI — Gallery | Signature AI Pixel</title>
+<meta name="description" content="Every image and video your AI has made for you in the Signature AI Pixel studio — with prompts, downloads, and honest 'made by your AI' attribution.">
+<style>
+:root{--bg:#0a0618;--bg2:#140b2e;--card:#1a1038;--line:#3a2568;--txt:#f2ecff;--dim:#b9a8e0;--acc:#00f0ff;--gold:#ffd166;--pink:#ff2fb3}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#241245 0%,var(--bg) 60%);color:var(--txt);font-family:Verdana,system-ui,sans-serif}
+a{color:var(--acc)}
+header.brand{text-align:center;padding:34px 16px 10px}
+header.brand h1{margin:0;font-size:clamp(24px,4.5vw,40px);letter-spacing:2px;background:linear-gradient(90deg,var(--acc),var(--pink),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--dim);max-width:820px;margin:12px auto 0;font-size:14px;line-height:1.5}
+nav.jahnet{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:12px;background:#0d0722;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:12px}
+nav.jahnet a{color:var(--dim);text-decoration:none;padding:5px 9px;border:1px solid var(--line);border-radius:20px}
+nav.jahnet .here{background:linear-gradient(90deg,#ff2f2f,#ff7a2f);color:#fff;border:none;font-weight:bold;padding:5px 12px;border-radius:20px}
+main{max-width:1100px;margin:0 auto;padding:20px 14px 60px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px}
+@media(max-width:480px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.card img,.card video{width:100%;display:block;background:#000}
+.card .t{padding:14px}
+.card .t .id{color:var(--dim);font-size:11px}
+.card .t .pr{font-size:13px;line-height:1.6;margin:8px 0}
+.badge{display:inline-block;background:linear-gradient(90deg,#8a6a1a,#ffd166);color:#241a05;font-size:11px;font-weight:bold;border-radius:8px;padding:3px 10px;margin:6px 6px 0 0}
+.meta{font-size:12px;color:var(--dim);margin-top:6px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.btn{background:linear-gradient(90deg,#0a7d8c,#00f0ff);color:#03252b;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:bold;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-block}
+.btn.ghost{background:transparent;color:var(--acc);border:1px solid var(--acc)}
+.empty{text-align:center;color:var(--dim);padding:40px 16px;line-height:1.8}
+#status{font-size:13px;color:var(--dim);text-align:center;margin-top:8px}
+footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center;color:var(--dim);font-size:13px;line-height:1.7;max-width:900px;margin:0 auto}
+.skiplink{position:absolute;left:-9999px}
+.skiplink:focus{left:8px;top:8px;background:var(--acc);color:#000;padding:8px 14px;border-radius:8px;z-index:99}
+</style>
+</head>
+<body>
+<a class="skiplink" href="#main">Skip to content</a>
+<nav class="jahnet" id="jahnet" aria-label="The JAH Network"></nav>
+<header class="brand">
+<h1>🖼 MADE BY YOUR AI</h1>
+<p class="sub">Everything the AI Studio has finished for you — real model-made images and videos, each with its prompt. <a href="generate.html"><b>Request something new →</b></a></p>
+</header>
+<main id="main">
+<div id="status" role="status">Loading the gallery…</div>
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty" style="display:none">
+<p><b>No finished pieces yet.</b><br>The studio fulfills requests about every 30 minutes.<br><a href="generate.html">Send your first request →</a></p>
+</div>
+</main>
+<footer><p>Part of <b>THE JAH NETWORK</b> · <a href="index.html">← back to Signature AI Pixel</a></p>
+<p class="hu" style="font-size:12px;color:var(--dim)">Every piece here was made by your AI from a typed request — never procedural clip-art.</p></footer>
+<script>
+(function(){
+var B="https://justinahiggins614-cmyk.github.io/";
+var S=[[1,"Signature Math","signature-math/"],[2,"Signature Universal Paradox Immune Calculator","jah-calculator/"],[3,"The Signature Dictionary","jah-dictionary/"],[4,"JAH Wiki","jah-wiki/"],[5,"Wiki Leaks","jah-n-wiki-leaks/"],[6,"Signature Llama: The Fully Cyber Utilizable AI","signature-llama/"],[7,"The Signature AI Phone Book","jah-ai-models/"],[8,"Globally Rejustered Patent Catalog","cyber-patent-catalog/"],[9,"Signature Spec Catalog Pending Patents","signature-one-archive/specs.html"],[10,"The Signature PC System Depository","jah-computer-systems/"],[11,"The Signature Book Depository","signature-books/"],[12,"The Signature Comic Store","signature-comics/"],[13,"The Signature Global Newspaper Archive","signature-newspapers/"],[14,"The Signature AI Mad Scientist Creation Lab","signature-backend/"],[15,"The Signature Boundless Generator Archive","signature-boundless-generators/"],[16,"The Signature AI Mix Lab","signature-ai-mixlab/"],[17,"AI Olypics","signature-ai-olypics/"],[18,"The Signature Computer Chip Maker and Archive","signature-chip-maker/"],[19,"The Signature App Archive","signature-app-archive/"],[20,"The Signature AI Robot Matcher","signature-ai-robot-matcher/"],[21,"The Signature Experiment Solver","signature-experiment-solver/"],[23,"Signature Music Studio","signature-ai-song-maker/"],[24,"The Signature Mr Fix-It","signature-fixit/"],[25,"The Signature University","signature-university/"],[26,"The Signature Cyber Mega-Mall","signature-cyber-mega-mall/"],[27,"The Signature 3D Print Mega Mall","signature-3d-print/"]];
+var h='<div style="width:100%;text-align:center;color:#b9a8e0;margin-bottom:6px">THE JAH NETWORK</div>';
+S.forEach(function(x){h+='<a href="'+B+x[2]+'">'+x[0]+' '+x[1]+'</a>';});
+h+='<span class="here">22 Signature AI Pixel — YOU ARE HERE</span>';
+document.getElementById("jahnet").innerHTML=h;
+})();
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+fetch("data/ai-gallery.json").then(function(r){if(!r.ok)throw new Error("http "+r.status);return r.json();}).then(function(items){
+  var grid=document.getElementById("grid"),st=document.getElementById("status");
+  items=items.slice().reverse();
+  st.textContent=items.length+" finished piece"+(items.length===1?"":"s")+" — made by your AI.";
+  if(!items.length){document.getElementById("empty").style.display="";return;}
+  grid.innerHTML=items.map(function(it){
+    var media=it.type==="video"
+      ?'<video src="'+esc(it.file)+'" controls preload="metadata" playsinline></video>'
+      :'<img src="'+esc(it.file)+'" alt="'+esc(it.prompt)+'" loading="lazy">';
+    var fname=esc(it.file.split("/").pop());
+    return '<div class="card">'+media+'<div class="t">'
+      +'<div class="id">'+esc(it.id)+' · '+esc(it.created||"")+'</div>'
+      +'<div><span class="badge">✨ made by your AI</span><span class="badge" style="background:#1a1038;color:#b9a8e0;border:1px solid #3a2568">'+esc(it.type)+'</span></div>'
+      +'<p class="pr">“'+esc(it.prompt)+'”</p>'
+      +'<div class="meta">Style: '+esc(it.style||"-")+(it.aspect&&it.aspect!=="-"?" · "+esc(it.aspect):"")+'</div>'
+      +'<div class="row"><a class="btn" href="'+esc(it.file)+'" download="'+fname+'">⬇ Download</a>'
+      +'<a class="btn ghost" href="generate.html">✨ New request</a></div>'
+      +'</div></div>';
+  }).join("");
+}).catch(function(e){
+  document.getElementById("status").textContent="Couldn't load the gallery just now — try refreshing.";
+  document.getElementById("empty").style.display="";
+});
+</script>
+</body>
+</html>
