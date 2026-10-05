@@ -3,7 +3,7 @@
   "live_url": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/",
   "official_name": "Signature AI Pixel",
   "repo": "signature-ai-image-video-maker",
-  "site_count": 33,
+  "site_count": 35,
   "site_number": 22,
   "sites": [
     {
@@ -170,6 +170,16 @@
       "n": 33,
       "name": "The Signature OS Updater",
       "url": "https://justinahiggins614-cmyk.github.io/signature-os-updater/"
+    },
+    {
+      "n": 34,
+      "name": "Signature Space Mapping",
+      "url": "https://justinahiggins614-cmyk.github.io/signature-space-mapping/"
+    },
+    {
+      "n": 35,
+      "name": "The Signature Cookbook",
+      "url": "https://justinahiggins614-cmyk.github.io/signature-cookbook/"
     }
   ]
 }
