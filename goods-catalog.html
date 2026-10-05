@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<!DOCTYPE html><html lang="en"><head>
+<script src="js/signin.js"></script>
+<script>/* JAHProfile-aware storage: public = plain localStorage, signed-in = per-profile namespace */
+var PS=(typeof JAHProfile!=='undefined')?JAHProfile.store:localStorage;</script><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Signature AI Pixel — Goods Catalog (A–Z archive)</title>
 <meta name="description" content="The full A–Z Signature AI Pixel goods archive: every good, searchable, grouped by category. Design mockups — printable art, not manufactured products.">
@@ -95,5 +98,9 @@ box.addEventListener("input",function(){
   });
 });
 })();
+</script>
+<script>
+/* JAHProfile sign-in button mount (graceful header fallback) */
+(function(){var m=document.querySelector('header .booksearch')||document.querySelector('nav.jtabbar')||document.querySelector('header nav')||document.querySelector('header')||document.body;if(window.JAHProfile&&JAHProfile.ui)JAHProfile.ui.renderButton(m);})();
 </script>
 </body></html>

@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>try{if(localStorage.getItem("jah-theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
+<script src="js/signin.js"></script>
+<script>/* JAHProfile-aware storage: public = plain localStorage, signed-in = per-profile namespace */
+var PS=(typeof JAHProfile!=='undefined')?JAHProfile.store:localStorage;</script>
+<script>try{if(PS.get("jah-theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Signature AI Pixel — Real AI Image &amp; Video Studio</title>
@@ -552,7 +555,7 @@ var DB={gIdx:null,aIdx:null,gChunks:{},aChunks:{},gInit:false,aInit:false,
   var self=this;
   return fetch("data/counts.json").then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();})
    .then(function(c){
-    try{localStorage.setItem("pixel:counts",JSON.stringify({t:Date.now(),c:c}));}catch(e){}
+    try{PS.set("pixel:counts",JSON.stringify({t:Date.now(),c:c}));}catch(e){}
     self.setCounts(c.goods_total,c.ads_total,"LIVE — archive counts from manifest · "+esc(c.generated_at.slice(0,10)));
     return c;
    });
@@ -573,7 +576,7 @@ var DB={gIdx:null,aIdx:null,gChunks:{},aChunks:{},gInit:false,aInit:false,
   },function(e){
    if(tries<1){return self.loadIndexes(tries+1);}
    /* fall back to cached counts, honestly labeled */
-   var cached=null;try{cached=JSON.parse(localStorage.getItem("pixel:counts")||"null");}catch(x){}
+   var cached=null;try{cached=JSON.parse(PS.get("pixel:counts")||"null");}catch(x){}
    if(cached&&cached.c){
     var d=new Date(cached.t).toISOString().slice(0,10);
     self.setCounts(cached.c.goods_total,cached.c.ads_total,
@@ -589,7 +592,7 @@ var DB={gIdx:null,aIdx:null,gChunks:{},aChunks:{},gInit:false,aInit:false,
   var self=this;
   return self.loadCounts().then(function(){return self.loadIndexes(0);},function(e){
    /* counts.json itself failed — try cache, then honest error */
-   var cached=null;try{cached=JSON.parse(localStorage.getItem("pixel:counts")||"null");}catch(x){}
+   var cached=null;try{cached=JSON.parse(PS.get("pixel:counts")||"null");}catch(x){}
    if(cached&&cached.c){
     var d=new Date(cached.t).toISOString().slice(0,10);
     self.setCounts(cached.c.goods_total,cached.c.ads_total,
@@ -974,8 +977,9 @@ var JIT={
   var t=String(q||"").toLowerCase().replace(/\s+/g," ").trim();
   if(!this.intent.test(t))return null;
   /* v2.1: cached chat session for the page Q&A box — conversation memory
-     (pronouns, ordinals, "tell me more") across turns. */
-  return JAHtalk.chatFor(profile,'page:pixel-qa').reply(q);
+     (pronouns, ordinals, "tell me more") across turns. Profile-namespaced key. */
+  var __ck=(typeof JAHProfile!=='undefined')?JAHProfile.chatKey('page:pixel-qa'):'page:pixel-qa';
+  return JAHtalk.chatFor(profile,__ck).reply(q);
  },
  /* every final answer passes through here: stat dumps get human repair */
  out:function(profile,text){
@@ -1051,11 +1055,11 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
 <button id="jah-theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">&#127769;</button>
 <script>
 /* dark-mode toggle: opt-in, default look unchanged */
-(function(){var b=document.getElementById("jah-theme-toggle");function paint(){b.innerHTML=document.documentElement.getAttribute("data-theme")==="dark"?"&#9728;&#65039;":"&#127769;"}b.addEventListener("click",function(){var dark=document.documentElement.getAttribute("data-theme")==="dark";try{if(dark){document.documentElement.removeAttribute("data-theme");localStorage.setItem("jah-theme","light")}else{document.documentElement.setAttribute("data-theme","dark");localStorage.setItem("jah-theme","dark")}}catch(e){}paint()});paint()})();
+(function(){var b=document.getElementById("jah-theme-toggle");function paint(){b.innerHTML=document.documentElement.getAttribute("data-theme")==="dark"?"&#9728;&#65039;":"&#127769;"}b.addEventListener("click",function(){var dark=document.documentElement.getAttribute("data-theme")==="dark";try{if(dark){document.documentElement.removeAttribute("data-theme");PS.set("jah-theme","light")}else{document.documentElement.setAttribute("data-theme","dark");PS.set("jah-theme","dark")}}catch(e){}paint()});paint()})();
 /* session restore: scroll + tabs + last-opened record, localStorage only */
 (function(){var KEY="jah-sr:"+location.pathname,PARAMS=["ad","good"];
-function rd(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return{}}}
-function wr(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+function rd(){try{return JSON.parse(PS.get(KEY)||"{}")}catch(e){return{}}}
+function wr(o){try{PS.set(KEY,JSON.stringify(o))}catch(e){}}
 var S=rd(),q=new URLSearchParams(location.search);
 var deep=PARAMS.some(function(p){return q.has(p)});
 var t;addEventListener("scroll",function(){clearTimeout(t);t=setTimeout(function(){S.y=window.scrollY;wr(S)},300)},{passive:true});
@@ -1083,8 +1087,8 @@ addEventListener("load",function(){setTimeout(function(){
 (function(){
   var FLAG="jah-tour-seen-pixel";
   function el(id){return document.getElementById(id);}
-  function seen(){try{return localStorage.getItem(FLAG)==="1";}catch(e){return true;}}
-  function mark(){try{localStorage.setItem(FLAG,"1");}catch(e){}}
+  function seen(){try{return PS.get(FLAG)==="1";}catch(e){return true;}}
+  function mark(){try{PS.set(FLAG,"1");}catch(e){}}
   function openTour(){var o=el("pxtourover");if(!o)return;o.classList.add("open");o.setAttribute("aria-hidden","false");}
   function closeTour(){var o=el("pxtourover");if(o){o.classList.remove("open");o.setAttribute("aria-hidden","true");}mark();}
   function guideOpen(){var g=el("pxguide");if(g){g.classList.add("on");try{el("pxguidex").focus({preventScroll:true});}catch(e){}}}
@@ -1105,6 +1109,10 @@ addEventListener("load",function(){setTimeout(function(){
   });
   window.addEventListener("load",function(){setTimeout(function(){if(!seen())openTour();},1500);});
 })();
+</script>
+<script>
+/* JAHProfile sign-in button mount (graceful header fallback) */
+(function(){var m=document.querySelector('header .booksearch')||document.querySelector('nav.jtabbar')||document.querySelector('header nav')||document.querySelector('header')||document.body;if(window.JAHProfile&&JAHProfile.ui)JAHProfile.ui.renderButton(m);})();
 </script>
 </body>
 </html>
