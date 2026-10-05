@@ -939,7 +939,8 @@ document.getElementById("trygo").onclick=function(){
 /* ================= JAHtalk shared talker (universal AI voice) =================
    JAHtalk (js/jah-talk-fallback.js) is the shared, zero-network conversational
    layer for every AI on every Signature site. Conversational intents ("hello",
-   "what are your duties?") are answered in human words by JAHtalk.reply, and
+   "what are your duties?") are answered in human words by a cached
+   JAHtalk.chatFor session (v2.1, with conversation memory), and
    every final answer passes through JAHtalk.guard so no stat dump ever ships.
    The profile below is a SITE-HELPER AI — it claims no canon JAH-AI ID and must
    never present one. code/coherence_check.py verifies this. */
@@ -965,7 +966,9 @@ var JIT={
   if(!window.JAHtalk)return null;
   var t=String(q||"").toLowerCase().replace(/\s+/g," ").trim();
   if(!this.intent.test(t))return null;
-  return JAHtalk.reply(profile,q);
+  /* v2.1: cached chat session for the page Q&A box — conversation memory
+     (pronouns, ordinals, "tell me more") across turns. */
+  return JAHtalk.chatFor(profile,'page:pixel-qa').reply(q);
  },
  /* every final answer passes through here: stat dumps get human repair */
  out:function(profile,text){
