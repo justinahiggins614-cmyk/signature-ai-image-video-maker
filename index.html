@@ -192,8 +192,6 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <button class="on" data-tab="home" role="tab">🏠 Home</button>
 <button data-tab="image" role="tab">🎨 Pixel-Art Toy</button>
 <button data-tab="video" role="tab">🎬 Pixel Video Toy</button>
-<button data-tab="goods" role="tab">🛍️ Goods Catalog</button>
-<button data-tab="ads" role="tab">📢 Product Ads</button>
 <button data-tab="take" role="tab">💾 Take the AI</button>
 <button data-tab="ask" role="tab">❓ Ask</button>
 </div>
@@ -233,13 +231,13 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <h3>🛍️ Goods Catalog</h3>
 <p>Printable design mockups — posters, shirts, stickers, surfboards and more, marching to 1,000,000.</p>
 <p class="hu">⚠️ Design files, not physical products. Nothing is manufactured, shipped, or for sale — every design downloads free.</p>
-<button class="btn" onclick="goTab('goods')">Browse goods →</button>
+<button class="btn" onclick="location.href='goods-catalog.html'">Browse goods →</button>
 </div>
 <div class="card hcard">
 <h3>📢 Product Ads</h3>
 <p>Auto-made ad creatives for Signature products — an image ad and a video ad per product, stored as made.</p>
 <p class="hu">⚠️ Generated mock creatives, not live commercial listings. Nothing is for sale here.</p>
-<button class="btn" onclick="goTab('ads')">Browse ads →</button>
+<button class="btn" onclick="location.href='ads-catalog.html'">Browse ads →</button>
 </div>
 <div class="card hcard">
 <h3>🎬 Edit a Video</h3>
@@ -315,43 +313,6 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <div class="note">Videos render as live canvas animation on your device and export to <b>.webm</b> (Chrome/Edge desktop recommended for export). Deterministic: the same prompt makes the same video.</div>
 </section>
 
-<!-- GOODS -->
-<section class="pane" id="pane-goods">
-<div class="card">
-<h2>🛍️ Goods Catalog — a million potential goods</h2>
-<p class="sub">Every way an image can live in the world: posters, stickers, shirts, surfboards and more. Each good carries original Signature art as a printable design mockup — free to download.</p>
-<p class="sub">📚 Browse the <a href="goods-catalog.html"><b>full A–Z goods archive</b></a> — every good, searchable, grouped by category and name.</p>
-<p class="warnline">⚠️ <b>Design mockups, not physical products.</b> Every good is a printable art file you download free — nothing here is manufactured, shipped, or for sale.</p>
-<div class="gstick">
-<div class="toolbar">
-<input type="text" id="gq" placeholder="Search goods…" aria-label="Search goods">
-<select id="gcat" aria-label="Category"><option value="">All categories</option></select>
-<button class="btn" id="ggo">Search</button>
-<span id="gcount" role="status" aria-live="polite"></span>
-</div>
-<div class="az" id="gaz"></div>
-</div>
-<div class="grid" id="ggrid"></div>
-<div class="row"><button class="btn ghost" id="gmore" style="display:none">Load more</button></div>
-</div>
-</section>
-
-<!-- ADS -->
-<section class="pane" id="pane-ads">
-<div class="card">
-<h2>📢 Product Ads — auto-made for every Signature product</h2>
-<p class="sub">The engine watches the catalogs and makes an image ad and a video ad for each product — stored here as made. Image creative downloads as PNG/SVG; video ads preview live on your device.</p>
-<p class="sub">📚 Browse the <a href="ads-catalog.html"><b>full A–Z ad archive</b></a> — every ad, searchable, grouped by product name.</p>
-<p class="warnline">⚠️ <b>Generated ad creatives, not live commercial listings.</b> The engine auto-makes mock ads for Signature products — nothing is for sale and no purchase is possible here.</p>
-<div class="toolbar">
-<input type="text" id="aq" placeholder="Search ads by product…" aria-label="Search ads">
-<button class="btn" id="ago">Search</button>
-</div>
-<div class="grid" id="agrid"></div>
-<div class="row"><button class="btn ghost" id="amore" style="display:none">Load more</button></div>
-</div>
-</section>
-
 <!-- TAKE THE AI -->
 <section class="pane" id="pane-take">
 <div class="card">
@@ -424,7 +385,7 @@ footer{border-top:1px solid var(--line);padding:26px 16px 90px;text-align:center
 <li><b>Download .webm</b> exports the video. <b>.webm export needs Chrome or Edge on desktop</b> — the live preview plays in any modern browser.</li></ul>
 <h3>🛍️ Goods Catalog</h3>
 <ul><li>Printable <b>design mockups</b> (posters, stickers, shirts, surfboards…) marching to 1,000,000 — free to download.</li>
-<li>Search by keyword, filter by category, or browse A–Z. Tap a card for the full record: SVG/PNG download, copy, read-aloud, share, and a deep link like <b>?goods=JAH-GOODS-000001</b>.</li>
+<li>On the <a href="goods-catalog.html"><b>full A–Z goods archive</b></a>: search by keyword, filter by category, or browse A–Z. Tap a card for the full record: SVG/PNG download, copy, read-aloud, share, and a deep link like <b>?goods=JAH-GOODS-000001</b>.</li>
 <li>⚠️ Design files, not physical products — nothing is manufactured, shipped, or for sale.</li></ul>
 <h3>📢 Product Ads</h3>
 <ul><li>Auto-made ad creatives for Signature products — each with an image ad (PNG/SVG download) and a video ad that previews live.</li>
@@ -502,8 +463,6 @@ document.querySelectorAll(".tabs button").forEach(function(b){
     b.classList.add("on");TAB=b.dataset.tab;
     document.querySelectorAll("section.pane").forEach(function(p){p.classList.remove("on");});
     document.getElementById("pane-"+TAB).classList.add("on");
-    if(TAB==="goods"&&!DB.gInit)GoodsUI.init();
-    if(TAB==="ads"&&!DB.aInit)AdsUI.init();
   });
 });
 function goTab(t){var b=document.querySelector('.tabs button[data-tab="'+t+'"]');if(b)b.click();}
@@ -737,64 +696,7 @@ document.getElementById("vidread").onclick=function(){if(VID.plan)rdSpeak("Signa
 })();
 
 /* ================= GOODS UI ================= */
-var GoodsUI={list:[],shown:0,filter:{q:"",cat:"",az:""},
-init:function(){
-  DB.gInit=true;
-  document.getElementById("ggrid").innerHTML="<p role='status'><span class='spin'></span> Loading goods catalog…</p>";
-  var cats=SigArt.GOOD_CATS,sel=document.getElementById("gcat");
-  cats.forEach(function(c){var o=document.createElement("option");o.value=c;o.textContent=c;sel.appendChild(o);});
-  var az=document.getElementById("gaz");az.innerHTML="";
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(function(L){
-    var b=document.createElement("button");b.textContent=L;
-    b.onclick=function(){GoodsUI.filter.az=(GoodsUI.filter.az===L?"":L);az.querySelectorAll("button").forEach(function(x){x.classList.remove("on");});if(GoodsUI.filter.az)b.classList.add("on");GoodsUI.apply();};
-    az.appendChild(b);
-  });
-  document.getElementById("ggo").onclick=function(){GoodsUI.filter.q=document.getElementById("gq").value.trim().toLowerCase();GoodsUI.filter.cat=document.getElementById("gcat").value;GoodsUI.apply();};
-  /* FIX-06: instant keyword search (debounced) + live category filtering */
-  function pullFilter(){GoodsUI.filter.q=document.getElementById("gq").value.trim().toLowerCase();GoodsUI.filter.cat=document.getElementById("gcat").value;}
-  var deb=null;
-  document.getElementById("gq").addEventListener("input",function(){clearTimeout(deb);deb=setTimeout(function(){pullFilter();GoodsUI.apply();},200);});
-  document.getElementById("gcat").addEventListener("change",function(){pullFilter();GoodsUI.apply();});
-  document.getElementById("gq").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("ggo").click();});
-  document.getElementById("gmore").onclick=function(){GoodsUI.renderMore();};
-  DB.load().then(function(){GoodsUI.apply();});
-},
-apply:function(){
-  var f=this.filter;
-  if(!DB.gIdx){document.getElementById("ggrid").innerHTML="<p>Couldn't load the goods catalog — this browser may not support gzip streaming (DecompressionStream). Try Chrome or Edge, or browse the <a href='goods-catalog.html'>full A–Z goods archive</a>.</p>";document.getElementById("gmore").style.display="none";return;}
-  this.list=DB.gIdx.filter(function(r){
-    if(f.cat&&r[2]!==f.cat)return false;
-    if(f.az&&r[1][0].toUpperCase()!==f.az)return false;
-    if(f.q&&(r[1]+" "+r[2]+" "+r[0]).toLowerCase().indexOf(f.q)<0)return false;
-    return true;
-  });
-  document.getElementById("gcount").textContent=this.list.length.toLocaleString("en-US")+" of "+DB.gIdx.length.toLocaleString("en-US")+" goods";
-  this.shown=0;document.getElementById("ggrid").innerHTML="";
-  this.renderMore();
-},
-renderMore:function(){
-  var grid=document.getElementById("ggrid"),next=Math.min(this.shown+48,this.list.length);
-  var frag=document.createDocumentFragment(),self=this;
-  var need={};
-  this.list.slice(this.shown,next).forEach(function(r){(need[r[3]]=need[r[3]]||[]).push(r);});
-  var fns=Object.keys(need),done=0;
-  if(!fns.length){document.getElementById("gmore").style.display="none";return;}
-  fns.forEach(function(fn){
-    DB.gChunk(fn).then(function(m){
-      need[fn].forEach(function(r){
-        var g=m[r[0]];if(!g)return;
-        var art=SigArt.composeImage(g.prompt,{});
-        var card=document.createElement("div");card.className="gcard";
-        card.innerHTML=SigArt.mockupSVG(g.cat,art,g.seed)+'<div class="t"><b>'+esc(g.name)+'</b><span class="id">'+g.id+" · "+esc(g.cat)+"</span></div>";
-        card.onclick=function(){GoodsUI.open(g.id);};
-        frag.appendChild(card);
-      });
-      if(++done===fns.length){grid.appendChild(frag);self.shown=next;
-        document.getElementById("gmore").style.display=self.shown<self.list.length?"block":"none";}
-    });
-  });
-},
-open:function(id){
+var GoodsUI={open:function(id){
   var row=DB.gIdx.find(function(r){return r[0]===id;});if(!row)return;
   DB.gChunk(row[3]).then(function(m){
     var g=m[id];if(!g)return;
@@ -851,44 +753,7 @@ document.getElementById("mx").onclick=function(){modalHide();};
 document.getElementById("modal").addEventListener("click",function(e){if(e.target===this){modalHide();}});
 
 /* ================= ADS UI ================= */
-var AdsUI={list:[],shown:0,q:"",
-init:function(){
-  DB.aInit=true;
-  document.getElementById("agrid").innerHTML="<p role='status'><span class='spin'></span> Loading product ads…</p>";
-  document.getElementById("ago").onclick=function(){AdsUI.q=document.getElementById("aq").value.trim().toLowerCase();AdsUI.apply();};
-  document.getElementById("aq").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("ago").click();});
-  document.getElementById("amore").onclick=function(){AdsUI.renderMore();};
-  DB.load().then(function(){AdsUI.apply();});
-},
-apply:function(){
-  var q=this.q;
-  if(!DB.aIdx){document.getElementById("agrid").innerHTML="<p>Couldn't load the ads index — this browser may not support gzip streaming (DecompressionStream). Try Chrome or Edge.</p>";document.getElementById("amore").style.display="none";return;}
-  this.list=DB.aIdx.filter(function(r){return !q||(r[1]+" "+r[2]).toLowerCase().indexOf(q)>=0;});
-  this.shown=0;document.getElementById("agrid").innerHTML="";
-  this.renderMore();
-},
-renderMore:function(){
-  var grid=document.getElementById("agrid"),next=Math.min(this.shown+48,this.list.length);
-  var frag=document.createDocumentFragment(),self=this,need={};
-  this.list.slice(this.shown,next).forEach(function(r){(need[r[3]]=need[r[3]]||[]).push(r);});
-  var fns=Object.keys(need),done=0;
-  if(!fns.length){document.getElementById("amore").style.display="none";return;}
-  fns.forEach(function(fn){
-    DB.aChunk(fn).then(function(m){
-      need[fn].forEach(function(r){
-        var a=m[r[0]];if(!a)return;
-        var svg=SigArt.adCreative(a);
-        var card=document.createElement("div");card.className="gcard";
-        card.innerHTML=svg+'<div class="t"><b>'+esc(a.product.name)+'</b><span class="id">'+a.id+" · advertises "+esc(a.product.site)+"</span></div>";
-        card.onclick=function(){AdsUI.open(a.id);};
-        frag.appendChild(card);
-      });
-      if(++done===fns.length){grid.appendChild(frag);self.shown=next;
-        document.getElementById("amore").style.display=self.shown<self.list.length?"block":"none";}
-    });
-  });
-},
-open:function(id){
+var AdsUI={open:function(id){
   var row=DB.aIdx.find(function(r){return r[0]===id;});if(!row)return;
   DB.aChunk(row[3]).then(function(m){
     var a=m[id];if(!a)return;
@@ -1037,11 +902,13 @@ function route(){
   var q=new URLSearchParams(location.search);
   function whenReady(flag,fn){var t=setInterval(function(){if(DB[flag]){clearInterval(t);fn();}},300);}
   if(q.get("pixel")){var g=pixelToGoods(q.get("pixel"));
-    if(g){goTab("goods");whenReady("gIdx",function(){GoodsUI.open(g);});}
-    else{goTab("goods");var st=document.getElementById("idxstatus");if(st)st.textContent="PIXEL NOT FOUND — no artwork "+q.get("pixel");}
+    if(g){whenReady("gIdx",function(){GoodsUI.open(g);});}
+    else{var st=document.getElementById("idxstatus");if(st)st.textContent="PIXEL NOT FOUND — no artwork "+q.get("pixel");}
   }
-  else if(q.get("goods")){goTab("goods");whenReady("gIdx",function(){GoodsUI.open(q.get("goods"));});}
-  else if(q.get("ad")){goTab("ads");whenReady("aIdx",function(){AdsUI.open(q.get("ad"));});}
+  else if(q.get("goods")){whenReady("gIdx",function(){GoodsUI.open(q.get("goods"));});}
+  else if(q.get("ad")){whenReady("aIdx",function(){AdsUI.open(q.get("ad"));});}
+  else if(q.get("tab")==="goods"){location.href="goods-catalog.html";}
+  else if(q.get("tab")==="ads"){location.href="ads-catalog.html";}
   else if(q.get("tab")){goTab(q.get("tab"));}
 }
 DB.load().then(route,route);
