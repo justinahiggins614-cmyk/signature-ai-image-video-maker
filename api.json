@@ -18,7 +18,8 @@
   "pixel": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?pixel=JAH-PIXEL-000001",
   "ad": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?ad=JAH-AD-000001",
   "catalog": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/goods-catalog.html",
-  "feed": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/pixel-catalog.json"
+  "feed": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/pixel-catalog.json",
+  "feed_shards": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/catalog/"
  },
  "network": "THE JAH NETWORK \u2014 27 sites"
 }

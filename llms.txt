@@ -7,7 +7,7 @@
 - Home: https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/
 - Authoritative manifest (counts, engine hashes, QA status): https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/pixel-manifest.json
 - Instant counts: https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/counts.json
-- Full catalog feed: https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/pixel-catalog.json
+- Full catalog feed (sharded): https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/pixel-catalog.json is the manifest (format sharded-feed-index/1.0); feed rows live in gz shards under https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/catalog/ (pix-cNNNNN.json.gz, 20,000 rows each; gunzip to read)
 - API: https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/api.json
 - AI manifest (machine): https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/ai-manifest.json
 - Static catalog (crawler): https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/goods-catalog.html

@@ -184,6 +184,7 @@ def main():
             "ad": SITE + "?ad=JAH-AD-000001",
             "catalog": SITE + "goods-catalog.html",
             "feed": SITE + "data/pixel-catalog.json",
+            "feed_shards": SITE + "data/catalog/",
         },
         "honesty": {
             "free_and_unlimited": "image/video GENERATION is free and unlimited; archive STORAGE is bounded by the catalog",

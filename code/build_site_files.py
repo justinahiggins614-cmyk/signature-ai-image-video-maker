@@ -70,26 +70,52 @@ def all_goods_rows():
                                          g.get("cat", ""), g.get("desc", "")))
     return rows
 
+SHARD_ROWS = 20000  # feed rows per gz shard (keeps each shard far under host limits)
+
 def write_catalog_feed(goods, ads):
-    """data/pixel-catalog.json — standardized machine-readable feed (AI-USER FIX-02)."""
-    import time
+    """data/pixel-catalog.json — standardized machine-readable feed (AI-USER FIX-02).
+    SHARDED (2026-10-21): the full row stream is split into data/catalog/pix-cNNNNN.json.gz
+    shards (20,000 rows each); data/pixel-catalog.json remains a small self-describing
+    manifest at the historic URL so every existing link/feed pointer keeps working."""
+    import time, gzip
+    ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    rows = ([{"id": i, "name": n, "type": c, "description": d,
+              "url": SITE + "?goods=" + i} for (i, n, c, d) in goods]
+            + [{"id": a, "url": SITE + "?ad=" + a} for a in ads])
+    catd = os.path.join(BASE, "data", "catalog")
+    os.makedirs(catd, exist_ok=True)
+    shards = []
+    n = (len(rows) + SHARD_ROWS - 1) // SHARD_ROWS
+    for s in range(n):
+        chunk = rows[s * SHARD_ROWS:(s + 1) * SHARD_ROWS]
+        fn = "pix-c%05d.json.gz" % (s + 1)
+        with gzip.open(os.path.join(catd, fn), "wt", encoding="utf-8") as f:
+            json.dump({"site": "Signature AI Pixel", "updated": ts,
+                       "shard": s + 1, "of": n, "records": chunk},
+                      f, separators=(",", ":"))
+        shards.append({"file": "data/catalog/" + fn, "records": len(chunk),
+                       "first_id": chunk[0]["id"], "last_id": chunk[-1]["id"]})
     feed = {
         "site": "Signature AI Pixel",
         "site_url": SITE,
-        "generated": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "updated": ts,
+        "total_records": len(rows),
         "goods_total": len(goods),
+        "ads_total": len(ads),
         "goods_goal": 1000000,
         "deep_link_pattern": SITE + "?goods={id}",
-        "goods": [{"id": i, "name": n, "type": c, "description": d,
-                   "url": SITE + "?goods=" + i} for (i, n, c, d) in goods],
-        "ads_total": len(ads),
-        "ads": [{"id": a, "url": SITE + "?ad=" + a} for a in ads],
         "network": "THE JAH NETWORK — 27 sites",
+        "format": "sharded-feed-index/1.0",
+        "shards": shards,
+        "note": ("Full feed rows moved to gz shards 2026-10-21 (GitHub 100MB file "
+                 "limit); fetch data/catalog/<file> and gunzip. "
+                 "data/pixel-catalog.json stays the manifest at the historic URL."),
     }
     p = os.path.join(BASE, "data", "pixel-catalog.json")
     with open(p, "w") as f:
         json.dump(feed, f, separators=(",", ":"))
-    print(f"feed: {p} ({len(goods)} goods, {len(ads)} ads)")
+    print(f"feed: {p} manifest ({len(goods)} goods, {len(ads)} ads, "
+          f"{len(rows)} rows in {n} shards)")
 
 def write_goods_cat_files(cats):
     """data/goods-cat/<slug>.json.gz — per-category compact rows [id,name,desc],

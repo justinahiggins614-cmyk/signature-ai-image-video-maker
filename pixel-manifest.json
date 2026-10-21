@@ -9,7 +9,7 @@
   "site_number": 22,
   "site_count": 27
  },
- "generated_at": "2026-10-21T18:28:31Z",
+ "generated_at": "2026-10-21T18:37:26Z",
  "counts": {
   "goods_total": 214000,
   "goods_goal": 1000000,
@@ -79,7 +79,8 @@
   "pixel": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?pixel=JAH-PIXEL-000001",
   "ad": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/?ad=JAH-AD-000001",
   "catalog": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/goods-catalog.html",
-  "feed": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/pixel-catalog.json"
+  "feed": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/pixel-catalog.json",
+  "feed_shards": "https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/data/catalog/"
  },
  "honesty": {
   "free_and_unlimited": "image/video GENERATION is free and unlimited; archive STORAGE is bounded by the catalog",
