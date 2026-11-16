@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-11-16T14:30:09Z",
- "goods_total": 785000,
+ "generated_at": "2026-11-16T16:30:25Z",
+ "goods_total": 787000,
  "goods_goal": 1000000,
- "ads_total": 196350,
+ "ads_total": 196850,
  "manifest": "pixel-manifest.json",
- "manifest_sha256": "f0394f1185c13aeb3de9c65b5c19f5fbec57d88e9190e0154104c25998f5b58c"
+ "manifest_sha256": "6a6866c5892b940a2ee5cbef0c3ae7f9c6e01fb3558317cc196f8000545cc85a"
 }
